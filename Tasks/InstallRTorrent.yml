@@ -1,0 +1,59 @@
+# Run with:
+# ansible-playbook InstallRTorrent.yml
+
+---
+- name: Install RTorrent
+  hosts: all
+  tasks:
+
+  - name: Install RTorrent package on OpenSUSE/SUSE Linux
+    zypper:
+      name: rtorrent
+      state: present
+
+  - name: Downloading Template RTorrent settings file
+    shell: curl -Ls "https://raw.githubusercontent.com/wiki/rakshasa/rtorrent/CONFIG-Template.md" | sed -ne "/^######/,/^### END/p" > /home/ajorians/.rtorrent.rc
+
+  - name: Change RTorrent settings file ownership, group and permissions
+    ansible.builtin.file:
+      path: /home/ajorians/.rtorrent.rc
+      owner: ajorians
+      group: users
+      mode: '0755'
+
+  - name: Create RTorrent directory
+    ansible.builtin.file:
+      path: /home/ajorians/rtorrent
+      owner: ajorians
+      group: users
+      mode: '0755'
+      state: directory
+
+  - name: Create download files directory
+    ansible.builtin.file:
+      path: /mnt/download_files
+      owner: ajorians
+      group: users
+      mode: '0755'
+      state: directory
+
+  - name: Create torrent files directory
+    ansible.builtin.file:
+      path: /mnt/torrent_files
+      owner: ajorians
+      group: users
+      mode: '0755'
+      state: directory
+
+  - name: Set base directory
+    ansible.builtin.lineinfile:
+      path: /home/ajorians/.rtorrent.rc
+      regexp: '\/home\/USERNAME'
+      line: 'method.insert = cfg.basedir,  private|const|string, "/home/ajorians/rtorrent/"'
+
+  - name: Set download directory
+    ansible.builtin.lineinfile:
+      path: /home/ajorians/.rtorrent.rc
+      regexp: '^method.insert\s=\scfg.download'
+      line: 'method.insert = cfg.download, private|const|string, "/mnt/download_files"'
+

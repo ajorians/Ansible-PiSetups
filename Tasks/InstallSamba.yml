@@ -1,0 +1,27 @@
+# Run with:
+# ansible-playbook InstallSamba.yml
+
+---
+- name: Install Samba
+  hosts: all
+  tasks:
+
+  - name: Install Samba package on OpenSUSE/SUSE Linux
+    zypper:
+      name: samba
+      state: present
+
+  - name: Install Samba YAST2 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: yast2-samba-server
+      state: present
+
+  - name: Enable Samba service
+    ansible.builtin.systemd:
+      name: smb
+      enabled: yes
+
+  - name: Start Samba service
+    ansible.builtin.systemd:
+      state: restarted
+      name: smb

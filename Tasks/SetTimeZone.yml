@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook SetTimeZone.yml
+
+---
+- name: Configure the Timezone
+  hosts: all
+  tasks:
+
+    - name: Update Timezone with timedatectl
+      ansible.builtin.command: /usr/bin/timedatectl set-timezone America/New_York
+
+

@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallGit.yml
+
+---
+- name: Install Git
+  hosts: all
+  tasks:
+
+  - name: Install just Git package on OpenSUSE/SUSE Linux
+    zypper:
+      name: git
+      state: present
+

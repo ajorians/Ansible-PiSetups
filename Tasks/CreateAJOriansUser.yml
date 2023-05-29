@@ -1,0 +1,38 @@
+# Run with:
+# ansible-playbook CreateAJOriansUser.yml --ask-vault-pass
+
+---
+- name: Create Local User AJOrians
+  hosts: all
+  vars:
+    userpasswd: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          37373864393961333963393262653162303066623734346534366536666265346137333839353336
+          3931396539336637306365366264336635326533373365630a653263663130353131363431303163
+          34303930643765653534343837363161326162666162356331663363363231353634373761393736
+          3365633765626564370a643532383562326136343836313535396533313138353139386233333562
+          3964
+  tasks:
+
+    - name: Add Directories To skeleton directory
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      loop:
+        - /etc/skel/Documents
+        - /etc/skel/Downloads
+        - /etc/skel/Mail
+        - /etc/skel/Maildir
+
+    - name: Print Variables
+      debug:
+        msg: "Setting password to: {{ userpasswd }}"
+
+    - name: Add AJOrians local user
+      ansible.builtin.user:
+        name: ajorians
+        comment: A.J. Orians
+        uid: 1000
+        create_home: true
+        password: "{{ userpasswd | string | password_hash('sha512') }}"

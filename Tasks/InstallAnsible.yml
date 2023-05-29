@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallAnsible.yml
+
+---
+- name: Install Ansible
+  hosts: all
+  tasks:
+
+  - name: Install Ansible package on OpenSUSE/SUSE Linux
+    zypper:
+      name: ansible
+      state: present
+

@@ -1,0 +1,54 @@
+# Run with:
+# ansible-playbook InstallPhp.yml
+
+---
+- name: Install Php
+  hosts: all
+  tasks:
+
+  - name: Install Php 8 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: php8
+      state: present
+
+  - name: Install Php 8 extension packages on OpenSUSE/SUSE Linux
+    zypper:
+      state: present
+      name:
+        - php8-APCu
+        - php8-cli
+        - php8-ctype
+        - php8-curl
+        - php8-dom
+        - php8-fileinfo
+        - php8-gd
+        - php8-iconv
+        - php8-intl
+        - php8-mbstring
+        - php8-mysql
+        - php8-openssl
+        - php8-pdo
+        - php8-phar
+        - php8-sqlite
+        - php8-tokenizer
+        - php8-xmlreader
+        - php8-xmlwriter
+        - php8-zip
+        - php8-zlib
+
+  - name: Install Apache2 Php Mod package on OpenSUSE/SUSE Linux
+    zypper:
+      name: apache2-mod_php8
+      state: present
+
+  - name: Enable the Apache2 module 
+    community.general.apache2_module:
+      state: present
+      name: php8
+    ignore_errors: yes #BUG will error if already present
+
+  - name: Start Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+

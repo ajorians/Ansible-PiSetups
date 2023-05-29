@@ -1,0 +1,34 @@
+# Run with:
+# ansible-playbook InstallVSFTP.yml
+
+---
+- name: Install VSFTP
+  hosts: all
+  tasks:
+
+  - name: Install VSFTP package on OpenSUSE/SUSE Linux
+    zypper:
+      name: vsftpd
+      state: present
+
+  - name: Enable upload capability
+    ansible.builtin.lineinfile:
+      path: /etc/vsftpd.conf
+      regexp: '^write_enable=NO'
+      line: 'write_enable=YES'
+
+  - name: Set banner message
+    ansible.builtin.lineinfile:
+      path: /etc/vsftpd.conf
+      regexp: '^#ftpd_banner=Welcome to blah FTP service.'
+      line: 'ftpd_banner=Welcome to Orians Download FTP service.'
+
+  - name: Enable FTP service
+    ansible.builtin.systemd:
+      name: vsftpd
+      enabled: yes
+
+  - name: Start FTP service
+    ansible.builtin.systemd:
+      state: restarted
+      name: vsftpd

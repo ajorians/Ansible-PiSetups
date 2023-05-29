@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallScreen.yml
+
+---
+- name: Install Screen
+  hosts: all
+  tasks:
+
+  - name: Install Screen package on OpenSUSE/SUSE Linux
+    zypper:
+      name: screen
+      state: present
+

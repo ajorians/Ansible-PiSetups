@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallRar.yml
+
+---
+- name: Install Rar
+  hosts: all
+  tasks:
+
+  - name: Install Rar package on OpenSUSE/SUSE Linux
+    zypper:
+      name: unrar
+      state: present
+

@@ -1,0 +1,62 @@
+# Run with:
+# ansible-playbook SetupMariaDB.yml --ask-vault-pass
+
+---
+- name: Install MariaDB
+  hosts: all
+  vars:
+    databasepasswd: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          64363739626261663336323432333332326265333831643664326239316533373337323231313132
+          3537396163376266666162326262316166613364636331340a326630636464313962623331636138
+          30653237353231633732313164373234323731333361323762363362333862363730363237343030
+          3563333664613937390a306261643631636435666437363138663237636132306538323430646661
+          6434
+  tasks:
+
+  - name: Install MariaDB package on OpenSUSE/SUSE Linux
+    zypper:
+      name: mariadb
+      state: present
+
+  - name: Install MariaDB Python client package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python311-mysqlclient
+      state: present
+
+  - name: Make ~/.my.cnf file
+    ansible.builtin.copy:
+      dest: /root/.my.cnf
+      content: |
+        [client]
+        user=root
+        password={{ databasepasswd }}
+
+  - name: Allow connections besides localhost
+    replace:
+      path: /etc/my.cnf
+      regexp: '^bind-address\s+=\s+127.0.0.1'
+      replace: '#bind-address = 127.0.0.1'
+      backup: yes
+
+  - name: Enable Maria service
+    ansible.builtin.systemd:
+      name: mysql
+      enabled: yes
+
+  - name: Start Maria service
+    ansible.builtin.systemd:
+      state: restarted
+      name: mysql
+
+  - name: Is root password set?
+    command: mysql -u root --execute "SELECT NOW()"
+    register: is_root_password_set
+    ignore_errors: yes
+
+  - name: Set root password
+    mysql_user:
+      user=root
+      password="{{ databasepasswd }}"
+      host=localhost
+    when: is_root_password_set.rc == 0

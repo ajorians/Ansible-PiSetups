@@ -1,0 +1,17 @@
+# Run with:
+# ansible-playbook InstallPython.yml
+
+---
+- name: Install Python
+  hosts: all
+  tasks:
+
+  - name: Install Python package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python
+      state: present
+
+  - name: Install Python Cryptography package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python311-cryptography
+      state: present

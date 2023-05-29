@@ -1,0 +1,22 @@
+# Run with:
+# ansible-playbook -i inventory.ini BasicSetupSteps.yml --ask-vault-pass --limit 'datapis'
+
+---
+- import_playbook: Tasks/SetTimeZone.yml
+- import_playbook: Tasks/CreateAJOriansUser.yml
+- import_playbook: Tasks/ZypperUpdate.yml
+- import_playbook: Tasks/InstallAnsible.yml
+- import_playbook: Tasks/InstallDocker.yml
+- import_playbook: Tasks/InstallGit.yml
+- import_playbook: Tasks/SetupMariaDB.yml
+- import_playbook: Tasks/InstallMLocate.yml
+
+- import_playbook: Tasks/InstallScreen.yml
+- import_playbook: Tasks/InstallSamba.yml
+
+- import_playbook: Tasks/InstallVSFTP.yml
+
+- import_playbook: Tasks/InstallApache2.yml
+- import_playbook: Tasks/InstallPhp.yml
+
+

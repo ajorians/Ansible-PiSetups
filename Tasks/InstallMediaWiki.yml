@@ -1,0 +1,89 @@
+# Run with:
+# ansible-playbook InstallMediaWiki.yml
+
+---
+- name: Install MediaWiki
+  hosts: all
+  tasks:
+
+  - name: check if mediawiki exists
+    stat: 
+      path: /srv/www/htdocs/mediawiki-1.39.3
+    register: mediawiki_exists
+
+  - name: Download MediaWiki
+    ansible.builtin.get_url:
+      url: https://releases.wikimedia.org/mediawiki/1.39/mediawiki-1.39.3.zip
+      dest: /srv/www/htdocs/mediawiki-1.39.3.zip
+    when: mediawiki_exists.stat.exists == false
+
+  - name: Extract MediaWiki
+    ansible.builtin.unarchive:
+      src: /srv/www/htdocs/mediawiki-1.39.3.zip
+      dest: /srv/www/htdocs
+      remote_src: yes
+    when: mediawiki_exists.stat.exists == false
+
+  - name: Change permissions for MediaWiki
+    ansible.builtin.file:
+      path: /srv/www/htdocs/mediawiki-1.39.3
+      owner: wwwrun
+      group: www
+
+  - name: check if rating extension exists
+    stat:
+      path: /srv/www/htdocs/mediawiki-1.39.3/extensions/SemanticRating
+    register: semanticrating_exists
+
+  - name: Create Database
+    community.mysql.mysql_db:
+      login_user: root
+      name:
+        - mediawiki
+      state: present
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: wikiuser
+      host: 'localhost'
+      password: wikipassword 
+      priv:
+        'mediawiki.*': 'ALL,GRANT'
+
+#  - name: Change permissions for files directory
+#    ansible.builtin.file:
+#      path: /srv/www/htdocs/backdrop/files
+#      owner: wwwrun
+#      group: www
+#      mode: '0755'
+
+#  - name: Change permissions for settings file
+#    ansible.builtin.file:
+#      path: /srv/www/htdocs/backdrop/settings.php
+#      owner: wwwrun
+#      group: www
+#      mode: '0755'
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/mediawiki.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ServerAdmin webmaster@localhost
+           DocumentRoot /srv/www/htdocs/mediawiki.1-39.3
+           ServerName wiki.orians.org
+           ServerAlias wiki mediawiki.orians.org mediawiki wiki.local newwiki.local
+           <Directory /srv/www/htdocs/mediawiki-1.39.3>
+              Options All
+              AllowOverride All
+           </Directory>
+         </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+
