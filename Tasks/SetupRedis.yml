@@ -1,0 +1,64 @@
+# Run with:
+# ansible-playbook SetupRedis.yml
+
+---
+- name: Install Redis
+  hosts: all
+  tasks:
+
+  - name: Install Redis package on OpenSUSE/SUSE Linux
+    zypper:
+      name: redis
+      state: present
+
+  - name: Copy default config file
+    ansible.builtin.copy:
+      src: /etc/redis/default.conf.example
+      dest: /etc/redis/redis.conf
+      remote_src: true
+
+  - name: Allow connections besides localhost
+    replace:
+      path: /etc/redis/redis.conf
+      regexp: 'bind\s127.0.0.1 -::1'
+      replace: 'bind * -::*'
+      backup: yes
+
+  # Unless I am creating a password I need to turn off protection mode
+  - name: Turn off protection mode
+    replace:
+      path: /etc/redis/redis.conf
+      regexp: 'protected-mode yes'
+      replace: 'protected-mode no'
+      backup: yes
+
+  - name: Make Systemd file
+    ansible.builtin.copy:
+      dest: /etc/systemd/system/redis.service
+      content: |
+        [Unit]
+        Description=Redis In-Memory Data Store
+        After=network.target
+
+        [Service]
+        User=root
+        Group=root
+        ExecStart=/sbin/redis-server /etc/redis/redis.conf
+        LimitNOFILE=10240
+        ExecStop=/sbin/redis-cli shutdown
+        Restart=always
+
+        [Install]
+        WantedBy=multi-user.target
+
+  - name: Enable Redis service
+    ansible.builtin.systemd:
+      name: redis
+      daemon_reload: yes
+      enabled: yes
+
+  - name: Start Redis service
+    ansible.builtin.systemd:
+      state: restarted
+      name: redis
+

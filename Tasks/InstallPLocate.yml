@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook InstallPLocate.yml
+
+---
+- name: Install PLocate
+  hosts: all
+  tasks:
+
+  - name: Install PLocate package on OpenSUSE/SUSE Linux
+    zypper:
+      name: plocate
+      state: present

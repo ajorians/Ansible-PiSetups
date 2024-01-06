@@ -19,11 +19,6 @@
       name: mariadb
       state: present
 
-  - name: Install MariaDB Python client package on OpenSUSE/SUSE Linux
-    zypper:
-      name: python311-mysqlclient
-      state: present
-
   - name: Make ~/.my.cnf file
     ansible.builtin.copy:
       dest: /root/.my.cnf

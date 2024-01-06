@@ -1,0 +1,65 @@
+# Run with:
+# ansible-playbook -i inventory.ini ConfigureNFS.yml
+
+---
+- name: Server configure NFS and Start Service
+  hosts: swarm-managers
+  tasks:
+
+  - name: Install nfs-kernel-server
+    zypper:
+      name: nfs-kernel-server
+      state: present
+
+  - name: Create directory for data
+    file:
+      path: /mnt/DockerSwarmData 
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Export data directory in /etc/exports
+    ansible.builtin.lineinfile:
+      path: /etc/exports
+      regexp: '^/mnt/DockerSwarmData'
+      line: /mnt/DockerSwarmData *(rw,sync,no_root_squash)
+
+  - name: Enable NFS service
+    ansible.builtin.systemd:
+      name: nfs-server
+      enabled: yes
+
+  - name: Start NFS service
+    ansible.builtin.systemd:
+      state: restarted
+      name: nfs-server
+
+- name: Client configure NFS and Start Service
+  hosts: swarm-workers
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: /opt/DockerSwarmData
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Mount data directory in /etc/fstab
+    ansible.builtin.lineinfile:
+      path: /etc/fstab
+      regexp: "^host:/mnt/DockerSwarmData"
+      line: 'host:/mnt/DockerSwarmData /opt/DockerSwarmData nfs default 0 0'
+
+  - name: Enable NFS-client service
+    ansible.builtin.systemd:
+      name: nfs-client.target
+      enabled: yes
+
+  - name: Start NFS-client service
+    ansible.builtin.systemd:
+      state: restarted
+      name: nfs-client.target
+

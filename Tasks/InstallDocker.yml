@@ -33,9 +33,9 @@
       name: python*-pip
       state: present
 
-  - name: Install Docker-Compose python package
-    ansible.builtin.pip:
-      name: docker-compose
+#  - name: Install Docker-Compose python package
+#    ansible.builtin.pip:
+#      name: docker-compose
 
   - name: Enable Docker service
     ansible.builtin.systemd:

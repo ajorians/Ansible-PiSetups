@@ -1,0 +1,11 @@
+# Run with:
+# ansible-playbook -i inventory.ini FullSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+- import_playbook: Tasks/SetupPostgreSQL.yml
+- import_playbook: Tasks/SetupRedis.yml
+- import_playbook: Tasks/ConfigureNFS.yml
+
+- import_playbook: Tasks/InitDockerSwarm.yml
+

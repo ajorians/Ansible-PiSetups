@@ -1,0 +1,42 @@
+# Run with:
+# ansible-playbook -i inventory.ini InitDockerSwarm.yml
+
+---
+- name: Initialize docker swarm
+  hosts: swarm-managers
+  tasks:
+  - name: Check if Swarm has already been Initialized
+    shell: docker node ls
+    register: swarm_status
+    ignore_errors: true
+    tags: swarm
+
+  - name: Initialize Docker Swarm
+    docker_swarm:
+      state: present
+      advertise_addr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}" 
+    when: swarm_status.rc != 0
+    run_once: true
+    tags: swarm
+
+  - name: Get the Manager join-token
+    shell: docker swarm join-token --quiet manager
+    register: manager_token
+    tags: swarm
+
+  - name: Get the worker join-token
+    shell: docker swarm join-token --quiet worker
+    register: worker_token
+    tags: swarm
+
+- name: Add Workers to the Swarm
+  hosts: swarm-workers
+  tasks:
+
+  - name: Join the worker to the swarm
+    docker_swarm:
+      state: join
+      advertise_addr: "{{ ansible_host }}"
+      join_token: "{{ hostvars['host.local']['worker_token']['stdout'] }}"
+      remote_addrs: [ 'host.local:2377' ]
+    tags: swarm

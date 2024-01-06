@@ -1,0 +1,74 @@
+# Run with:
+# ansible-playbook SetupPostgreSQL.yml
+
+---
+- name: Install PostgreSQL
+  hosts: all
+  tasks:
+
+  - name: Install PostgreSQL package on OpenSUSE/SUSE Linux
+    zypper:
+      name: postgresql
+      state: present
+
+  - name: Install PostgreSQL-server package on OpenSUSE/SUSE Linux
+    zypper:
+      name: postgresql-server
+      state: present
+
+  # Needed for Ansible's database module
+  - name: Install psycopg2 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python310-psycopg2
+      state: present
+
+  - name: Enable Postgres service
+    ansible.builtin.systemd:
+      name: postgresql
+      daemon_reload: yes
+      enabled: yes
+
+  - name: Start Postgres service
+    ansible.builtin.systemd:
+      state: restarted
+      name: postgresql
+
+  - name: Allow connections from anywhere
+    replace:
+      path: /var/lib/pgsql/data/postgresql.conf
+      regexp: "#listen_addresses = 'localhost'"
+      replace: "listen_addresses = '*'"
+      backup: yes
+
+  - name: Allow connections besides localhost
+    replace:
+      path: /var/lib/pgsql/data/pg_hba.conf
+      regexp: 'local\s+all\s+all\s+peer'
+      replace: 'local   all   all      trust'
+      backup: yes
+
+  - name: Allow connections besides localhost2
+    replace:
+      path: /var/lib/pgsql/data/pg_hba.conf
+      regexp: 'host\s+all\s+all\s+127.0.0.1/32\s+ident'
+      replace: 'host   all   all   0.0.0.0/0   trust'
+      backup: yes
+
+  - name: Allow connections besides localhost3
+    replace:
+      path: /var/lib/pgsql/data/pg_hba.conf
+      regexp: 'host\s+all\s+all\s+::1/128\s+ident'
+      replace: 'host   all   all   ::/0   trust'
+      backup: yes
+
+  - name: Allow connections besides localhost4
+    replace:
+      path: /var/lib/pgsql/data/postgresql.conf
+      regexp: "#listen_address = 'localhost'"
+      replace: "listen_address = '*'"
+      backup: yes
+
+  - name: Restart Postgres service
+    ansible.builtin.systemd:
+      state: restarted
+      name: postgresql
