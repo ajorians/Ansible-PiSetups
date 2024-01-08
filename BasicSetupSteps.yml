@@ -8,8 +8,10 @@
 - import_playbook: Tasks/InstallAnsible.yml
 - import_playbook: Tasks/InstallDocker.yml
 - import_playbook: Tasks/InstallGit.yml
+- import_playbook: Tasks/SetupGitCredentials.yml
 - import_playbook: Tasks/SetupMariaDB.yml
 - import_playbook: Tasks/InstallPLocate.yml
+- import_playbook: Tasks/InstallUnrar.yml
 
 - import_playbook: Tasks/InstallScreen.yml
 - import_playbook: Tasks/InstallSamba.yml
