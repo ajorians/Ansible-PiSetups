@@ -1,0 +1,32 @@
+# Run with:
+# ansible-playbook Birthdays.yml
+
+---
+- name: Setup Birthdays Site
+  hosts: cms
+  tasks:
+
+  - name: Clone Birthdays Source
+    ansible.builtin.git:
+      repo: https://github.com/ajorians/birthdays
+      dest: /srv/www/htdocs/birthdays
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/birthdays.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ServerAdmin webmaster@localhost
+           ServerName birthdaysbk.orians.org
+           ServerAlias birthdays
+           <Directory /srv/www/htdocs/birthdays/src>
+             Options All
+             AllowOverride All
+           </Directory>
+         </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2

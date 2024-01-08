@@ -9,3 +9,5 @@
 
 - import_playbook: Tasks/InitDockerSwarm.yml
 
+- import_playbook: ServerSetup/Birthdays.yml
+
