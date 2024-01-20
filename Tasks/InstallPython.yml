@@ -15,3 +15,9 @@
     zypper:
       name: python311-cryptography
       state: present
+
+  - name: Install Python3 Devel package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python311-devel
+      state: present
+

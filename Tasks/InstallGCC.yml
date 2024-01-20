@@ -1,0 +1,24 @@
+# Run with:
+# ansible-playbook InstallGCC.yml
+
+---
+- name: Install GC
+  hosts: all
+  tasks:
+
+  - name: Install GCC packages on OpenSUSE/SUSE Linux
+    zypper:
+      name: gcc13*
+      state: present
+
+  - name: Create a symbolic link
+    ansible.builtin.file:
+      src: /usr/bin/gcc-13
+      dest: /usr/bin/gcc
+      state: link
+
+  - name: Create a symbolic link
+    ansible.builtin.file:
+      src: /usr/bin/g++-13
+      dest: /usr/bin/g++
+      state: link

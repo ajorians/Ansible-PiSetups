@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallMPC.yml
+
+---
+- name: Install MPC
+  hosts: development
+  tasks:
+
+  - name: Install MPC package on OpenSUSE/SUSE Linux
+    zypper:
+      name: mpc-devel
+      state: present
+

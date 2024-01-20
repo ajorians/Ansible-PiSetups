@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallGMP.yml
+
+---
+- name: Install GMP
+  hosts: development
+  tasks:
+
+  - name: Install GMP package on OpenSUSE/SUSE Linux
+    zypper:
+      name: gmp-devel
+      state: present
+

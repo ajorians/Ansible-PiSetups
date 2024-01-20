@@ -1,0 +1,28 @@
+# Run with:
+# ansible-playbook InstallNDLessSDK.yml
+
+---
+- name: Install NDLess SDK
+  hosts: development
+  tasks:
+
+  - name: Check if NDLess source exists
+    stat:
+      path: /home/ajorians/Documents/git/Ndless
+    register: ndless_exists
+
+  - name: Clone NDLess Source
+    become: yes
+    become_user: ajorians
+    ansible.builtin.git:
+      repo: https://github.com/ndless-nspire/Ndless.git
+      dest: /home/ajorians/Documents/git/Ndless
+    when: ndless_exists.stat.exists == false
+
+  - name: Run setup script
+    become: yes
+    become_user: ajorians
+    shell:
+      cmd: ./build_toolchain.sh
+      chdir: /home/ajorians/Documents/git/Ndless/ndless-sdk/toolchain/
+

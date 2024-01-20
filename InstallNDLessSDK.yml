@@ -1,0 +1,15 @@
+# Run with:
+# ansible-playbook -i inventory.ini InstallNDLessSDK.yml
+
+---
+- import_playbook: Tasks/InstallGCC.yml
+- import_playbook: Tasks/InstallBinUtils.yml
+- import_playbook: Tasks/InstallGMP.yml
+- import_playbook: Tasks/InstallMPFR.yml
+- import_playbook: Tasks/InstallMPC.yml
+- import_playbook: Tasks/InstallZLib.yml
+- import_playbook: Tasks/InstallBoost.yml
+- import_playbook: Tasks/InstallWget.yml
+- import_playbook: Tasks/InstallNDLessSDK.yml
+
+

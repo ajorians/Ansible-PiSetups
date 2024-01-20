@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallBoost.yml
+
+---
+- name: Install Boost
+  hosts: development
+  tasks:
+
+  - name: Install Boost package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libboost_program_options-devel
+      state: present
+

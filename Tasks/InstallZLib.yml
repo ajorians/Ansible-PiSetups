@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallZLib.yml
+
+---
+- name: Install ZLib
+  hosts: development
+  tasks:
+
+  - name: Install ZLib package on OpenSUSE/SUSE Linux
+    zypper:
+      name: zlib-devel
+      state: present
+

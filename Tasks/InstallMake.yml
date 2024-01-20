@@ -1,0 +1,17 @@
+# Run with:
+# ansible-playbook InstallMake.yml
+
+---
+- name: Install Make
+  hosts: development
+  tasks:
+
+  - name: Install Make package on OpenSUSE/SUSE Linux
+    zypper:
+      name: make
+      state: present
+
+  - name: Install MakeInfo package on OpenSUSE/SUSE Linux
+    zypper:
+      name: makeinfo
+      state: present

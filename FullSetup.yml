@@ -3,6 +3,8 @@
 
 ---
 - import_playbook: BasicSetupSteps.yml
+- import_playbook: InstallNDLessSDK.yml
+
 - import_playbook: Tasks/SetupPostgreSQL.yml
 - import_playbook: Tasks/SetupRedis.yml
 - import_playbook: Tasks/ConfigureNFS.yml

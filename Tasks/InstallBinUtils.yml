@@ -1,0 +1,18 @@
+# Run with:
+# ansible-playbook InstallBinUtils.yml
+
+---
+- name: Install BinUtils
+  hosts: development
+  tasks:
+
+  - name: Install Binutils package on OpenSUSE/SUSE Linux
+    zypper:
+      name: binutils
+      state: present
+
+  - name: Install Binutils-develop package on OpenSUSE/SUSE Linux
+    zypper:
+      name: binutils-devel
+      state: present
+

@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallMPFR.yml
+
+---
+- name: Install MPFR
+  hosts: development
+  tasks:
+
+  - name: Install MPFR package on OpenSUSE/SUSE Linux
+    zypper:
+      name: mpfr-devel
+      state: present
+

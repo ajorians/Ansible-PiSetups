@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallWget.yml
+
+---
+- name: Install Wget
+  hosts: development
+  tasks:
+
+  - name: Install Wget package on OpenSUSE/SUSE Linux
+    zypper:
+      name: wget
+      state: present
+
