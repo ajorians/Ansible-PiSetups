@@ -1,0 +1,17 @@
+# Run with:
+# ansible-playbook InstallCertBot.yml
+
+---
+- name: Install CertBot
+  hosts: cms
+  tasks:
+
+  - name: Install Certbot package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python311-certbot
+      state: present
+
+  - name: Install Certbot Apache Plugin package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python311-certbot-apache
+      state: present

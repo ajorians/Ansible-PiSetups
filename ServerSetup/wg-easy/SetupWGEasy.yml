@@ -1,0 +1,33 @@
+# Run with
+# ansible-playbook SetupWGEasy.yml
+# https://github.com/wg-easy/wg-easy
+
+---
+- name: Setup WG-Easy
+  hosts: cms
+  tasks:
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/wgeasy.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName vpn.orians.org
+          ServerAlias homevpn.orians.org
+          ProxyPass / http://192.168.0.10:51821/
+          ProxyPassReverse / http://192.168.0.10:51821/
+        </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+
+  - name: Obtain SSL certificate
+    shell: certbot --agree-tos --apache -m ajorians@gmail.com -n -d vpn.orians.org
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2

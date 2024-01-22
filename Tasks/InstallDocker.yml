@@ -16,6 +16,11 @@
       name: docker-compose
       state: present
 
+  - name: Install docker-compose Python package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python311-docker-compose
+      state: present
+
   # Was needed for Docker Swarm
   - name: Install Python modules for docker package on OpenSUSE/SUSE Linux
     zypper:

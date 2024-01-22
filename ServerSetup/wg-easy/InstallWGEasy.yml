@@ -1,0 +1,34 @@
+# Run with
+# ansible-playbook InstallWGEasy.yml
+# https://github.com/wg-easy/wg-easy
+
+---
+- name: Setup WG-Easy
+  hosts: vpn
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/wireguard
+      - /root/docker
+      - /root/docker/wg-easy
+      - /mnt/backups
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/wg-easy
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy WG-Easy from a compose file
+    docker_compose:
+      project_src: /root/docker/wg-easy
+
