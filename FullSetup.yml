@@ -16,3 +16,5 @@
 - import_playbook: ServerSetup/wgeasy/InstalWGEasy.yml
 - import_playbook: ServerSetup/wgeasy/SetupWGEasy.yml
 
+- import_playbook: ServerSetup/squid/InstallSquid.yml
+

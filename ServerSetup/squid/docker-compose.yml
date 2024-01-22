@@ -1,0 +1,12 @@
+version: "3"
+services:
+  proxy:
+    image: ubuntu/squid
+    ports:
+      - "3128:3128"
+    environment:
+      - TZ=America/Detroit
+    volumes:
+      - /opt/DockerSwarmData/squid/squid/squid.conf:/etc/squid/squid.conf
+    restart: unless-stopped
+

@@ -1,0 +1,43 @@
+# Run with
+# ansible-playbook InstallSquid.yml
+# http://www.squid-cache.org/
+
+---
+- name: Setup Squid
+  hosts: cms
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/squid
+      - /opt/DockerSwarmData/squid/squid
+      - /root/docker
+      - /root/docker/squid
+      - /mnt/backups
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/squid
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Make configuration file
+    ansible.builtin.copy:
+      dest: /opt/DockerSwarmData/squid/squid/squid.conf
+      force: false
+      content: |
+         http_port 3128
+         http_access allow all
+
+  - name: Deploy Squid from a compose file
+    docker_compose:
+      project_src: /root/docker/squid
+
