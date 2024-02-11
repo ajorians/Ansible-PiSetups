@@ -1,0 +1,36 @@
+# Run with
+# ansible-playbook InstallNginxProxyManager.yml
+# https://nginxproxymanager.com/setup/
+
+---
+- name: Setup Nginx Proxy Manager
+  hosts: cms
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/nginxproxymanager
+      - /opt/DockerSwarmData/nginxproxymanager/data
+      - /opt/DockerSwarmData/nginxproxymanager/letsencrypt
+      - /root/docker
+      - /root/docker/nginx_proxy_manager
+      - /mnt/backups
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/nginx_proxy_manager
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Squid from a compose file
+    docker_compose:
+      project_src: /root/docker/squid
+
