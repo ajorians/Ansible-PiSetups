@@ -28,3 +28,5 @@
 - import_playbook: Tasks/InstallSQLite3.yml
 - import_playbook: Tasks/InstallUUID.yml
 - import_playbook: Tasks/InstallXML2.yml
+- import_playbook: Tasks/InstallGCC.yml
+- import_playbook: Tasks/InstallWget.yml
