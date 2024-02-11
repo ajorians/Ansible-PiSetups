@@ -1,0 +1,18 @@
+# Run with:
+# ansible-playbook InstallEdit.yml
+
+---
+- name: Install LibEdit
+  hosts: all
+  tasks:
+
+  - name: Install LibEdit package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libedit0
+      state: present
+
+  - name: Install LibEdit Devel package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libedit-devel
+      state: present
+

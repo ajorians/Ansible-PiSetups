@@ -1,0 +1,18 @@
+# Run with:
+# ansible-playbook InstallUUID.yml
+
+---
+- name: Install UUID
+  hosts: all
+  tasks:
+
+  - name: Install UUID package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libuuid1
+      state: present
+
+  - name: Install UUID Devel package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libuuid-devel
+      state: present
+

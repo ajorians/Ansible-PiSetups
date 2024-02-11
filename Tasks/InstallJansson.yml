@@ -1,0 +1,18 @@
+# Run with:
+# ansible-playbook InstallJansson.yml
+
+---
+- name: Install Jansson
+  hosts: all
+  tasks:
+
+  - name: Install Jansson library package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libjansson4
+      state: present
+
+  - name: Install Jansson library Devel package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libjansson-devel
+      state: present
+

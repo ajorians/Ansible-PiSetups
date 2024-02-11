@@ -1,0 +1,14 @@
+# Run with:
+# ansible-playbook InstallPatch.yml
+
+---
+- name: Install Patch
+  hosts: all
+  tasks:
+
+  - name: Install Patch package on OpenSUSE/SUSE Linux
+    zypper:
+      name: patch
+      state: present
+
+

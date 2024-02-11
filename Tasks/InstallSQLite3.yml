@@ -1,0 +1,23 @@
+# Run with:
+# ansible-playbook InstallSQLite3.yml
+
+---
+- name: Install SQLite3
+  hosts: all
+  tasks:
+
+  - name: Install LibSQLite3 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libsqlite3-0
+      state: present
+
+  - name: Install SQLite3 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: sqlite3
+      state: present
+
+  - name: Install SQLite3 Devel package on OpenSUSE/SUSE Linux
+    zypper:
+      name: sqlite3-devel
+      state: present
+

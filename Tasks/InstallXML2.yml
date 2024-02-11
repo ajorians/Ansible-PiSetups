@@ -1,0 +1,18 @@
+# Run with:
+# ansible-playbook InstallXML2.yml
+
+---
+- name: Install LibXML2
+  hosts: all
+  tasks:
+
+  - name: Install LibXML2 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libxml2-2
+      state: present
+
+  - name: Install LibXML2 Devel package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libxml2-devel
+      state: present
+

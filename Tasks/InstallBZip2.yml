@@ -1,0 +1,14 @@
+# Run with:
+# ansible-playbook InstallBZip2.yml
+
+---
+- name: Install BZip2
+  hosts: all
+  tasks:
+
+  - name: Install BZip2 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: bzip2
+      state: present
+
+

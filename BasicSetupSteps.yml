@@ -21,4 +21,10 @@
 - import_playbook: Tasks/InstallApache2.yml
 - import_playbook: Tasks/InstallPhp.yml
 
-
+- import_playbook: Tasks/InstallBZip2.yml
+- import_playbook: Tasks/InstallJansson.yml
+- import_playbook: Tasks/InstallLibEdit.yml
+- import_playbook: Tasks/InstallPatch.yml
+- import_playbook: Tasks/InstallSQLite3.yml
+- import_playbook: Tasks/InstallUUID.yml
+- import_playbook: Tasks/InstallXML2.yml
