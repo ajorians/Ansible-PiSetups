@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallSubversion.yml
+
+---
+- name: Install Subversion
+  hosts: all
+  tasks:
+
+  - name: Install just Subversion package on OpenSUSE/SUSE Linux
+    zypper:
+      name: subversion
+      state: present
+

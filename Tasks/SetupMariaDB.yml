@@ -19,6 +19,11 @@
       name: mariadb
       state: present
 
+  - name: Install MariaDB ODBC package on OpenSUSE/SUSE Linux
+    zypper:
+      name: mariadb-connector-odbc
+      state: present
+
   - name: Make ~/.my.cnf file
     ansible.builtin.copy:
       dest: /root/.my.cnf

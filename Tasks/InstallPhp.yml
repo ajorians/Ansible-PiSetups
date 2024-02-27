@@ -22,6 +22,7 @@
         - php8-dom
         - php8-fileinfo
         - php8-gd
+        - php8-gettext
         - php8-iconv
         - php8-intl
         - php8-mbstring
@@ -29,7 +30,9 @@
         - php8-openssl
         - php8-pdo
         - php8-phar
+        - php8-posix
         - php8-sqlite
+        - php8-sysvsem
         - php8-tokenizer
         - php8-xmlreader
         - php8-xmlwriter
