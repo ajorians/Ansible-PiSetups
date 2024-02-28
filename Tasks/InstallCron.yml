@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallCron.yml
+
+---
+- name: Install Cron
+  hosts: all
+  tasks:
+
+  - name: Install Cron package on OpenSUSE/SUSE Linux
+    zypper:
+      name: cron
+      state: present
+

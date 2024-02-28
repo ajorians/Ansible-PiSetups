@@ -1,0 +1,22 @@
+# Run with:
+# ansible-playbook InstallCMake.yml
+
+---
+- name: Install CMake
+  hosts: all
+  tasks:
+
+  - name: Install CMake package on OpenSUSE/SUSE Linux
+    zypper:
+      name: cmake
+      state: present
+
+  - name: Install cmake-full package on OpenSUSE/SUSE Linux
+    zypper:
+      name: cmake-full
+      state: present
+
+  - name: Install cmake-man package on OpenSUSE/SUSE Linux
+    zypper:
+      name: cmake-man
+      state: present

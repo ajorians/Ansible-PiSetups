@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallMPG.yml
+
+---
+- name: Install MPG
+  hosts: all
+  tasks:
+
+  - name: Install MPG123 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: mpg123
+      state: present
+

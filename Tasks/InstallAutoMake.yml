@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook InstallAutoMake.yml
+
+---
+- name: Install Automake
+  hosts: all
+  tasks:
+
+  - name: Install Automake package on OpenSUSE/SUSE Linux
+    zypper:
+      name: automake
+      state: present

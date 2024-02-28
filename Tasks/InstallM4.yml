@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook InstallM4.yml
+
+---
+- name: Install M4
+  hosts: all
+  tasks:
+
+  - name: Install M4 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: m4
+      state: present

@@ -3,7 +3,7 @@
 
 ---
 - name: Install Make
-  hosts: development
+  hosts: all
   tasks:
 
   - name: Install Make package on OpenSUSE/SUSE Linux

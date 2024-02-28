@@ -1,0 +1,19 @@
+# Run with:
+# ansible-playbook -i inventory.ini InstallFreePBX.yml
+
+---
+- import_playbook: Tasks/InstallCMake.yml
+- import_playbook: Tasks/InstallMPG.yml
+- import_playbook: Tasks/InstallAutoconf.yml
+- import_playbook: Tasks/InstallLibJSonCpp.yml
+- import_playbook: Tasks/InstallAutoMake.yml
+- import_playbook: Tasks/InstallFlex.yml
+- import_playbook: Tasks/InstallM4.yml
+- import_playbook: Tasks/InstallNodeJS.yml
+- import_playbook: Tasks/InstallNPM.yml
+- import_playbook: Tasks/InstallCron.yml
+
+- import_playbook: Tasks/InstallAsterisk.yml
+- import_playbook: Tasks/InstallFreePBX.yml
+
+

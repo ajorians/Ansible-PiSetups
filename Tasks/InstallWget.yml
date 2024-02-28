@@ -3,7 +3,7 @@
 
 ---
 - name: Install Wget
-  hosts: development
+  hosts: all
   tasks:
 
   - name: Install Wget package on OpenSUSE/SUSE Linux

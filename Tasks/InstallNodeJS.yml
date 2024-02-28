@@ -1,0 +1,17 @@
+# Run with:
+# ansible-playbook InstallNodeJS.yml
+
+---
+- name: Install NodeJS
+  hosts: all
+  tasks:
+
+  - name: Install NodeJS package on OpenSUSE/SUSE Linux
+    zypper:
+      name: nodejs21
+      state: present
+
+  - name: Install NodeJS-Common package on OpenSUSE/SUSE Linux
+    zypper:
+      name: nodejs-common
+      state: present

@@ -1,0 +1,128 @@
+# Run with:
+# ansible-playbook InstallFreePBX.yml
+
+---
+- name: Install FreePBX
+  hosts: all
+  vars:
+    databasepasswd: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          64363739626261663336323432333332326265333831643664326239316533373337323231313132
+          3537396163376266666162326262316166613364636331340a326630636464313962623331636138
+          30653237353231633732313164373234323731333361323762363362333862363730363237343030
+          3563333664613937390a306261643631636435666437363138663237636132306538323430646661
+          6434
+  tasks:
+
+  - name: Check if FreePBX source exists
+    stat:
+      path: /root/freepbx
+    register: freepbx_exists
+
+  - name: Clone FreePBX Source
+    ansible.builtin.git:
+      repo: https://github.com/FreePBX/framework.git 
+      dest: /root/freepbx
+      depth: 1
+      version: release/17.0
+    when: freepbx_exists.stat.exists == false
+
+  - name: Start Asterisk
+    ansible.builtin.shell: ./start_asterisk start
+    args:
+      chdir: /root/freepbx
+
+  - name: Run Install Script
+    ansible.builtin.shell: ./install --dbpass={{databasepasswd}} --webroot=/srv/www/htdocs -n
+    register: freepbxinstall_status
+    ignore_errors: true
+    args:
+      chdir: /root/freepbx
+
+  - name: Assert install was successful
+    assert:
+      that:
+        - "'You have successfully installed FreePBX' in freepbxinstall_status.stdout"
+
+  - name: Create a symbolic link
+    ansible.builtin.file:
+      src: /sbin/fwconsole
+      dest: /usr/local/bin/fwconsole
+      state: link
+
+  - name: Install Framework
+    ansible.builtin.shell: fwconsole ma downloadinstall framework
+    args:
+      chdir: /root/freepbx
+
+# Don't reload at this time as it'll error
+#  - name: Reload
+#    ansible.builtin.shell: fwconsole reload
+#    args:
+#      chdir: /root/freepbx
+
+  - name: Install Modules 1
+    ansible.builtin.shell: fwconsole ma downloadinstall cdr conferences customappsreg dashboard featurecodeadmin infoservices music pm2 sipsettings voicemail
+    args:
+      chdir: /root/freepbx
+
+  - name: Install Modules 2
+    ansible.builtin.shell: fwconsole ma downloadinstall announcement callforward callrecording callwaiting donotdisturb findmefollow parking ringgroups
+    args:
+      chdir: /root/freepbx
+
+  - name: Reload Again
+    ansible.builtin.shell: fwconsole reload
+    args:
+      chdir: /root/freepbx
+
+  - name: Set Http Bind Address
+    ansible.builtin.shell: fwconsole setting HTTPBINDADDRESS 127.0.0.1
+    args:
+      chdir: /root/freepbx
+
+  - name: Set Http TLS Bind Address
+    ansible.builtin.shell: fwconsole setting HTTPTLSBINDADDRESS 127.0.0.1
+    args:
+      chdir: /root/freepbx
+
+  - name: Make Systemd file
+    ansible.builtin.copy:
+      dest: /etc/systemd/system/freepbx.service
+      content: |
+        [Unit]
+        Description=FreePBX VoIP Server
+        After=mysql.service
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=/usr/sbin/fwconsole start -q
+        ExecStop=/usr/sbin/fwconsole stop -q
+
+        [Install]
+        WantedBy=multi-user.target
+
+  - name: Set AllowOveride All
+    ansible.builtin.shell: sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/default-server.conf
+
+  - name: Make Apache Run As Asterisk
+    ansible.builtin.copy:
+      dest: /etc/apache2/uid.conf
+      content: |
+        User asterisk
+        Group asterisk
+
+  - name: Recursively change ownership of /var/lib/php8/sessions
+    ansible.builtin.file:
+      path: /var/lib/php8/sessions
+      state: directory
+      recurse: yes
+      owner: asterisk
+      group: asterisk
+
+  - name: Start Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+

@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook InstallNPM.yml
+
+---
+- name: Install NPM
+  hosts: all
+  tasks:
+
+  - name: Install NPM package on OpenSUSE/SUSE Linux
+    zypper:
+      name: npm21
+      state: present

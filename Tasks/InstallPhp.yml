@@ -29,6 +29,7 @@
         - php8-mysql
         - php8-openssl
         - php8-pdo
+        - php8-pear
         - php8-phar
         - php8-posix
         - php8-sqlite
@@ -43,6 +44,15 @@
     zypper:
       name: apache2-mod_php8
       state: present
+
+  - name: Set max upload filesize
+    ansible.builtin.shell: sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php8/apache2/php.ini
+
+  - name: Set memory limit
+    ansible.builtin.shell: sed -i 's/\(^memory_limit = \).*/\1256M/' /etc/php8/apache2/php.ini
+
+  - name: Set CLI max upload filesize
+    ansible.builtin.shell: sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php8/cli/php.ini
 
   - name: Enable the Apache2 module 
     community.general.apache2_module:

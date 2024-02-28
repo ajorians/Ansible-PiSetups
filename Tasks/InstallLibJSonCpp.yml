@@ -1,0 +1,13 @@
+# Run with:
+# ansible-playbook InstallLibJSonCpp.yml
+
+---
+- name: Install LibJSonCpp
+  hosts: all
+  tasks:
+
+  - name: Install LibJSonCpp package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libjsoncpp25
+      state: present
+

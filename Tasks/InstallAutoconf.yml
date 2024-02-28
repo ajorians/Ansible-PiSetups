@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook InstallAutoconf.yml
+
+---
+- name: Install Autoconf
+  hosts: all
+  tasks:
+
+  - name: Install Autoconf package on OpenSUSE/SUSE Linux
+    zypper:
+      name: autoconf
+      state: present

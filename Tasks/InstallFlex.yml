@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook InstallFlex.yml
+
+---
+- name: Install Flex
+  hosts: all
+  tasks:
+
+  - name: Install Flex package on OpenSUSE/SUSE Linux
+    zypper:
+      name: flex
+      state: present
