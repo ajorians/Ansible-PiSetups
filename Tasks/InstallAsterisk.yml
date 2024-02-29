@@ -30,8 +30,14 @@
       path: /root/asterisk-21.1.0/main/asterisk
     register: asteriskbuilt_exists
 
-  - name: Use MP3
+  - name: Set use MP3 define
     ansible.builtin.shell: sed -i 's|\(^#define DEVICE_FRAME_SIZE \).*|\164|' addons/chan_mobile.c
+    args:
+      chdir: /root/asterisk-21.1.0
+
+# Switch repo due to connectivity issues
+  - name: Change MP3 repo
+    ansible.builtin.shell: sed -i 's|svn export https:\/\/svn\.digium\.com\/svn\/thirdparty\/mp3\/trunk|git clone --depth=1 https:\/\/github\.com\/ajorians\/thirdparty-mp3|' contrib/scripts/get_mp3_source.sh
     args:
       chdir: /root/asterisk-21.1.0
 
@@ -45,7 +51,7 @@
     ansible.builtin.shell: ./configure --with-pjproject-bundled --with-jansson-bundled
     args:
       chdir: /root/asterisk-21.1.0
-      creates: configure.ac
+      creates: makeopts
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: Make Asterisk Menuselect
@@ -171,6 +177,7 @@
       dest: /usr/local/bin/asterisk
       state: link
 
+# Can't figure this out yet
 #  - name: Add Asterisk shutdown to sudoers
 #    ansible.builtin.lineinfile:
 #      path: /etc/sudoers
