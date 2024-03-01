@@ -32,8 +32,14 @@
     args:
       chdir: /root/freepbx
 
+  - name: Create FreePBX server directory if it does not exist
+    ansible.builtin.file:
+      path: /srv/www/htdocs/freepbx
+      state: directory
+      mode: '0755'
+
   - name: Run Install Script
-    ansible.builtin.shell: ./install --dbpass={{databasepasswd}} --webroot=/srv/www/htdocs -n
+    ansible.builtin.shell: ./install --dbpass={{databasepasswd}} --webroot=/srv/www/htdocs/freepbx -n
     register: freepbxinstall_status
     ignore_errors: true
     args:
@@ -54,12 +60,6 @@
     ansible.builtin.shell: fwconsole ma downloadinstall framework
     args:
       chdir: /root/freepbx
-
-# Don't reload at this time as it'll error
-#  - name: Reload
-#    ansible.builtin.shell: fwconsole reload
-#    args:
-#      chdir: /root/freepbx
 
   - name: Install Modules 1
     ansible.builtin.shell: fwconsole ma downloadinstall cdr conferences customappsreg dashboard featurecodeadmin infoservices music pm2 sipsettings voicemail
@@ -120,6 +120,18 @@
       recurse: yes
       owner: asterisk
       group: asterisk
+
+  - name: Make VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/testfreepbx.orians.org
+      content: |
+        <VirtualHost *:80>
+          ServerAdmin webmaster@localhost
+          ServerName testfreepbx.orians.org
+          ServerAlias testfreepbx
+          DocumentRoot "/srv/www/htdocs/freepbx"
+          Options All
+        </VirtualHost>
 
   - name: Start Apache2 service
     ansible.builtin.systemd:
