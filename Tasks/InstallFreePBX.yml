@@ -27,6 +27,9 @@
       version: release/17.0
     when: freepbx_exists.stat.exists == false
 
+  - name: Start as wwwrun user
+    ansible.builtin.shell: sed -i 's/-U asterisk -G asterisk/-U wwwrun -G www/' /root/freepbx/start_asterisk
+
   - name: Start Asterisk
     ansible.builtin.shell: ./start_asterisk start
     args:
@@ -39,7 +42,7 @@
       mode: '0755'
 
   - name: Run Install Script
-    ansible.builtin.shell: ./install --dbpass={{databasepasswd}} --webroot=/srv/www/htdocs/freepbx -n
+    ansible.builtin.shell: ./install --dbpass={{databasepasswd}} --webroot=/srv/www/htdocs/freepbx --user=wwwrun --group=www -n
     register: freepbxinstall_status
     ignore_errors: true
     args:
@@ -106,20 +109,20 @@
   - name: Set AllowOveride All
     ansible.builtin.shell: sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/default-server.conf
 
-  - name: Make Apache Run As Asterisk
-    ansible.builtin.copy:
-      dest: /etc/apache2/uid.conf
-      content: |
-        User asterisk
-        Group asterisk
+ # - name: Make Apache Run As Asterisk
+#    ansible.builtin.copy:
+#      dest: /etc/apache2/uid.conf
+#      content: |
+#        User asterisk
+#        Group asterisk
 
-  - name: Recursively change ownership of /var/lib/php8/sessions
-    ansible.builtin.file:
-      path: /var/lib/php8/sessions
-      state: directory
-      recurse: yes
-      owner: asterisk
-      group: asterisk
+#  - name: Recursively change ownership of /var/lib/php8/sessions
+#    ansible.builtin.file:
+#      path: /var/lib/php8/sessions
+#      state: directory
+#      recurse: yes
+#      owner: asterisk
+#      group: asterisk
 
   - name: Make VHost file
     ansible.builtin.copy:
