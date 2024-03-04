@@ -3,7 +3,7 @@
 
 ---
 - name: Install OpenSSL development
-  hosts: development
+  hosts: all
   tasks:
 
   - name: Install OpenSSL development  package on OpenSUSE/SUSE Linux

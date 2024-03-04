@@ -2,6 +2,8 @@
 # ansible-playbook -i inventory.ini InstallFreePBX.yml
 
 ---
+- import_playbook: BasicSetupSteps.yml
+
 - import_playbook: Tasks/InstallCMake.yml
 - import_playbook: Tasks/InstallMPG.yml
 - import_playbook: Tasks/InstallAutoconf.yml

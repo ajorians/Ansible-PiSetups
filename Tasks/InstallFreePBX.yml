@@ -30,6 +30,30 @@
   - name: Start as wwwrun user
     ansible.builtin.shell: sed -i 's/-U asterisk -G asterisk/-U wwwrun -G www/' /root/freepbx/start_asterisk
 
+  - name: Stop Apache2 service
+    ansible.builtin.systemd:
+      state: stopped
+      name: apache2
+
+  - name: Add the user 'wwwrun' with a bash shell, appending the group 'asterisk' to the user's groups
+    ansible.builtin.user:
+      name: wwwrun
+      home: /home/wwwrun
+      create_home: true
+      shell: /bin/bash
+      groups: asterisk
+      append: yes
+
+  - name: Add Group write permissions to /var/lib/asterisk
+    ansible.builtin.file:
+      path: /var/lib/asterisk/
+      mode: '0775'
+
+  - name: Add Group write permissions to /var/log/asterisk
+    ansible.builtin.file:
+      path: /var/log/asterisk/
+      mode: '0775'
+
   - name: Start Asterisk
     ansible.builtin.shell: ./start_asterisk start
     args:
@@ -40,6 +64,29 @@
       path: /srv/www/htdocs/freepbx
       state: directory
       mode: '0755'
+
+  - name: Make ODBC File
+    ansible.builtin.copy:
+      dest: /etc/odbcinst.ini
+      content: |
+        [MySQL]
+        Description = ODBC for MySQL (MariaDB)
+        Driver = /usr/lib64/mariadb/libmaodbc.so
+        FileUsage = 1
+
+  - name: Make ODBC INI File
+    ansible.builtin.copy:
+      dest: /etc/odbc.ini
+      content: |
+        [MySQL-asteriskcdrdb]
+        Description=MySQL connection to 'asteriskcdrdb' database
+        driver=MySQL
+        server=localhost
+        database=asteriskcdrdb
+        Port=3306
+        Socket=/var/lib/mysql/mysql.sock
+        option=3
+        Charset=utf8
 
   - name: Run Install Script
     ansible.builtin.shell: ./install --dbpass={{databasepasswd}} --webroot=/srv/www/htdocs/freepbx --user=wwwrun --group=www -n
