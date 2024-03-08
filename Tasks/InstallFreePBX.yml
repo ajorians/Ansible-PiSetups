@@ -54,10 +54,33 @@
       path: /var/log/asterisk/
       mode: '0775'
 
-  - name: Start Asterisk
-    ansible.builtin.shell: ./start_asterisk start
-    args:
-      chdir: /root/freepbx
+  - name: Add Group write permissions to /var/run/asterisk
+    ansible.builtin.file:
+      path: /var/run/asterisk/
+      mode: '0775'
+
+  - name: Add Group write permissions to /etc/asterisk
+    ansible.builtin.file:
+      path: /etc/asterisk/
+      mode: '0775'
+
+  - name: Add Group write permissions to /sbin/asterisk
+    ansible.builtin.file:
+      path: /sbin/asterisk
+      mode: '0775'
+
+  - name: Add Group write permissions to /usr/sbin/asterisk
+    ansible.builtin.file:
+      path: /usr/sbin/asterisk
+      mode: '0775'
+
+  - name: Start Asterisk Manually
+    ansible.builtin.shell: su - wwwrun -c "/usr/local/bin/asterisk"
+
+#  - name: Start Asterisk
+#    ansible.builtin.shell: ./start_asterisk start
+#    args:
+#      chdir: /root/freepbx
 
   - name: Create FreePBX server directory if it does not exist
     ansible.builtin.file:
@@ -152,6 +175,11 @@
 
         [Install]
         WantedBy=multi-user.target
+
+  - name: Enable FreePBX service
+    ansible.builtin.systemd:
+      name: freepbx
+      enabled: yes
 
   - name: Set AllowOveride All
     ansible.builtin.shell: sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/default-server.conf
