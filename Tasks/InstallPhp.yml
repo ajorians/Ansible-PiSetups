@@ -10,6 +10,8 @@
     zypper:
       name: php8
       state: present
+    notify:
+    - Restart Apache2 service
 
   - name: Install Php 8 extension packages on OpenSUSE/SUSE Linux
     zypper:
@@ -39,11 +41,15 @@
         - php8-xmlwriter
         - php8-zip
         - php8-zlib
+    notify:
+    - Restart Apache2 service
 
   - name: Install Apache2 Php Mod package on OpenSUSE/SUSE Linux
     zypper:
       name: apache2-mod_php8
       state: present
+    notify:
+    - Restart Apache2 service
 
   - name: Set max upload filesize
     ansible.builtin.shell: sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php8/apache2/php.ini
@@ -60,8 +66,9 @@
       name: php8
     ignore_errors: yes #BUG will error if already present
 
-  - name: Start Apache2 service
-    ansible.builtin.systemd:
-      state: restarted
-      name: apache2
+  handlers:
+    - name: Start Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
 

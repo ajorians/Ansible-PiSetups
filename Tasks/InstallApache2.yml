@@ -10,11 +10,15 @@
     zypper:
       name: apache2
       state: present
+    notify:
+    - Restart Apache2 service
 
   - name: Install Apache2 Utils package on OpenSUSE/SUSE Linux
     zypper:
       name: apache2-utils
       state: present
+    notify:
+    - Restart Apache2 service
 
   # Certbot wants this enabled
   - name: Enable the rewrite Apache2 module
@@ -40,6 +44,8 @@
       path: /etc/apache2/httpd.conf
       regexp: '^DirectoryIndex index.html index.html.var'
       replace: 'DirectoryIndex index.html index.htm index.html.var'
+    notify:
+    - Restart Apache2 service
 
   # Useful for debugging
   - name: Set Options All
@@ -47,13 +53,18 @@
       path: /etc/apache2/default-server.conf
       regexp: 'Options None'
       replace: 'Options All'
-
-  - name: Start Apache2 service
-    ansible.builtin.systemd:
-      state: restarted
-      name: apache2
+    notify:
+    - Restart Apache2 service
 
   - name: Enable Apache2 service
     ansible.builtin.systemd:
       name: apache2
       enabled: yes
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
