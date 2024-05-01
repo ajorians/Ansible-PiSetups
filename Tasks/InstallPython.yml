@@ -21,3 +21,8 @@
       name: python311-devel
       state: present
 
+  # Was needed for setting mysql root password
+  - name: Install Python PyMySQL package on OpenSUSE/SUSE Linux
+    zypper:
+      name: python311-PyMySQL
+      state: present

@@ -67,7 +67,7 @@
     ignore_errors: yes #BUG will error if already present
 
   handlers:
-    - name: Start Apache2 service
+    - name: Restart Apache2 service
       ansible.builtin.systemd:
         state: restarted
         name: apache2

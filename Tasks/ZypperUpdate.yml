@@ -13,7 +13,9 @@
 
   - name: Check if a reboot is needed on all SUSE/OpenSUSE based servers
     register: linux_reboot_required_file
-    stat: path=/boot/do_purge_kernels get_md5=no
+    stat:
+      path: /boot/do_purge_kernels 
+      get_checksum: no
 
   - name: Reboot the SUSE/OpenSUSE box if kernel updated
     reboot:

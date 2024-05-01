@@ -7,3 +7,6 @@ That doesn't use a password
 
 To persist it: ssh-copy-id root@server
 
+## Usage
+You can run a playbook on a subset of the machines like so:
+ansible-playbook -i inventory.ini BasicSetupSteps.yml --ask-vault-pass --limit 'asterisk'
