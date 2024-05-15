@@ -1,0 +1,52 @@
+# Run with
+# ansible-playbook SetupResilioSync.yml
+# https://www.resilio.com/individuals/
+
+---
+- name: Setup Resilio-Sync
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /mnt/DockerSwarmData/resiliosync
+      - /mnt/DockerSwarmData/resiliosync/config
+      - /mnt/DockerSwarmData/resiliosync/downloads
+      - /root/docker
+      - /root/docker/resiliosync
+      - /mnt/backups
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/resiliosync
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Resilio-Sync from a compose file
+    docker_compose:
+      project_src: /root/docker/resiliosync
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/resiliosync.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName datapi1sync.orians.org
+          ProxyPass / http://127.0.0.1:9200/
+          ProxyPassReverse / http://127.0.0.9200/
+        </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+

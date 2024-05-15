@@ -1,0 +1,51 @@
+# Run with:
+# ansible-playbook InstallTemplateStyles.yml
+
+---
+- name: Install TemplateStyles Extension
+  hosts: all
+  tasks:
+
+  - name: Check if MediaWiki already setup
+    stat: 
+      path: /srv/www/htdocs/mediawiki-1.39.3/LocalSettings.php
+    register: localsettings_exists
+
+  - name: Message if MediaWiki not already setup
+    debug:
+        msg: "Need to setup MediaWiki before installing extension"
+    when: localsettings_exists.stat.exists == false
+
+  - name: End the play if MediaWiki not already setup
+    ansible.builtin.meta: end_play
+    when: localsettings_exists.stat.exists == false
+
+  - name: check if template styles extension exists
+    stat:
+      path: /srv/www/htdocs/mediawiki-1.39.3/extensions/TemplateStyles
+    register: templatestyles_exists
+
+  - name: Download Template Styles extension
+    ansible.builtin.get_url:
+      url: https://extdist.wmflabs.org/dist/extensions/TemplateStyles-REL1_39-97462d9.tar.gz
+      dest: /srv/www/htdocs/mediawiki-1.39.3/extensions/TemplateStyles.tar.gz
+    when: templatestyles_exists.stat.exists == false
+
+  - name: Extract Template Styles extension
+    ansible.builtin.unarchive:
+      src: /srv/www/htdocs/mediawiki-1.39.3/extensions/TemplateStyles.tar.gz
+      dest: /srv/www/htdocs/mediawiki-1.39.3/extensions
+      remote_src: yes
+    when: templatestyles_exists.stat.exists == false
+
+  - name: Change permissions for Template Styles extension
+    ansible.builtin.file:
+      path: /srv/www/htdocs/mediawiki-1.39.3/extensions/TemplateStyles
+      owner: wwwrun
+      group: www
+
+  - name: Add entry to LocalSettings.php
+    lineinfile:
+      state: present
+      dest: /srv/www/htdocs/mediawiki-1.39.3/LocalSettings.php
+      line: "wfLoadExtension( 'TemplateStyles' );"

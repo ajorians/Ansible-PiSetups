@@ -1,0 +1,51 @@
+# Run with:
+# ansible-playbook InstallSemanticRating.yml
+
+---
+- name: Install Semantic Rating Extension
+  hosts: all
+  tasks:
+
+  - name: Check if MediaWiki already setup
+    stat: 
+      path: /srv/www/htdocs/mediawiki-1.39.3/LocalSettings.php
+    register: localsettings_exists
+
+  - name: Message if MediaWiki not already setup
+    debug:
+        msg: "Need to setup MediaWiki before installing extension"
+    when: localsettings_exists.stat.exists == false
+
+  - name: End the play if MediaWiki not already setup
+    ansible.builtin.meta: end_play
+    when: localsettings_exists.stat.exists == false
+
+  - name: check if rating extension exists
+    stat:
+      path: /srv/www/htdocs/mediawiki-1.39.3/extensions/SemanticRating
+    register: semanticrating_exists
+
+  - name: Download Semantic Rating extension
+    ansible.builtin.get_url:
+      url: https://extdist.wmflabs.org/dist/extensions/SemanticRating-REL1_39-d3d6453.tar.gz
+      dest: /srv/www/htdocs/mediawiki-1.39.3/extensions/SemanticRating.tar.gz
+    when: semanticrating_exists.stat.exists == false
+
+  - name: Extract Semantic Rating extension
+    ansible.builtin.unarchive:
+      src: /srv/www/htdocs/mediawiki-1.39.3/extensions/SemanticRating.tar.gz
+      dest: /srv/www/htdocs/mediawiki-1.39.3/extensions
+      remote_src: yes
+    when: semanticrating_exists.stat.exists == false
+
+  - name: Change permissions for Semantic Rating extension
+    ansible.builtin.file:
+      path: /srv/www/htdocs/mediawiki-1.39.3/extensions/SemanticRating
+      owner: wwwrun
+      group: www
+
+  - name: Add entry to LocalSettings.php
+    lineinfile:
+      state: present
+      dest: /srv/www/htdocs/mediawiki-1.39.3/LocalSettings.php
+      line: "wfLoadExtension( 'SemanticRating' );"

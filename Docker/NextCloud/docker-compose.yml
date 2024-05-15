@@ -1,0 +1,17 @@
+version: "3"
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Detroit
+    volumes:
+      - /opt/DockerSwarmData/nextcloud/config:/config
+      - /opt/DockerSwarmData/nextcloud/data:/data
+    ports:
+      - 5600:80
+      - 5601:443
+    restart: unless-stopped
+

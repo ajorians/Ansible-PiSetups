@@ -1,0 +1,25 @@
+version: "3"
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Detroit
+      - JELLYFIN_PublishedServerUrl=jellyfin.orians.org #optional
+    volumes:
+      - /opt/DockerSwarmData/jellyfin/config:/config
+      - /opt/DockerSwarmData/jellyfin/tvshows:/data/tvshows
+      - /opt/DockerSwarmData/jellyfin/movies:/data/movies
+      - /mnt/download_files:/data/downloads
+      - /mnt/allwrite/family:/data/family
+      - /mnt/allwrite/favorites:/data/favorites
+      - /mnt/allwrite/new:/data/new
+      - /mnt/allwrite/brittany:/data/brittany
+    ports:
+      - 9000:8096
+      - 9001:8920 #optional
+      - 9002:7359/udp #optional
+      - 9003:1900/udp #optional
+    restart: unless-stopped

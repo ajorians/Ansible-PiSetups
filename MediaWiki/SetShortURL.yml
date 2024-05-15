@@ -1,0 +1,52 @@
+# Run with:
+# ansible-playbook SetShortURL.yml
+
+---
+- name: Set MediaWiki Short URL
+  hosts: all
+  tasks:
+
+  - name: Check if MediaWiki already setup
+    stat:
+      path: /srv/www/htdocs/mediawiki-1.39.3/LocalSettings.php
+    register: localsettings_exists
+
+  - name: Message if MediaWiki not already setup
+    debug:
+        msg: "Need to setup MediaWiki before can setup"
+    when: localsettings_exists.stat.exists == false
+
+  - name: End the play if MediaWiki not already setup
+    ansible.builtin.meta: end_play
+    when: localsettings_exists.stat.exists == false
+
+  - name: Set WGScriptPath in LocalSettings.php
+    lineinfile:
+      state: present
+      dest: /srv/www/htdocs/mediawiki-1.39.3/LocalSettings.php
+      regexp: '.wgScriptPath\s*=\s*\"'
+      line: '$wgScriptPath = "";'
+
+  - name: Set WGArticlePath in LocalSettings.php
+    lineinfile:
+      state: present
+      dest: /srv/www/htdocs/mediawiki-1.39.3/LocalSettings.php
+      regexp: '.wgArticlePath\s*=\s*\"'
+      insertafter:
+      line: '$wgArticlePath = "/$1";'
+
+  - name: Make .htaccess file
+    ansible.builtin.copy:
+      dest: /srv/www/htdocs/mediawiki-1.39.3/.htaccess
+      force: false
+      content: |
+        RewriteEngine On
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteRule ^(.*)$ %{DOCUMENT_ROOT}/index.php [L]
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteRule ^/?images/thumb/[0-9a-f]/[0-9a-f][0-9a-f]/([^/]+)/([0-9]+)px-.*$ %{DOCUMENT_ROOT}/thumb.php?f=$1&width=$2 [L,QSA,B]
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+        RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+        RewriteRule ^/?images/thumb/archive/[0-9a-f]/[0-9a-f][0-9a-f]/([^/]+)/([0-9]+)px-.*$ %{DOCUMENT_ROOT}/thumb.php?f=$1&width=$2&archived=1 [L,QSA,B]

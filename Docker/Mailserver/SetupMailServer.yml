@@ -1,0 +1,79 @@
+# Run with
+# ansible-playbook SetupMailserver.yml
+# https://docker-mailserver.github.io/docker-mailserver/latest/
+
+---
+- name: Setup Mailserver
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/mailserver
+      - /opt/DockerSwarmData/mailserver/maildata
+      - /opt/DockerSwarmData/mailserver/mailstate
+      - /opt/DockerSwarmData/mailserver/maillogs
+      - /opt/DockerSwarmData/mailserver/mailconfig
+      - /root/docker
+      - /root/docker/mailserver
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/mailserver
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Mailserver from a compose file
+    docker_compose:
+      project_src: /root/docker/mailserver
+
+  - name: check if created a user by directory exists
+    stat: 
+      path: /opt/DockerSwarmData/mailserver/maildata/orians.org/ajorians
+    register: user_exists
+
+  - name: Create ajorians email account
+    community.docker.docker_container_exec:
+      container: mailserver
+      command: setup email add ajorians@orians.org testpass
+      chdir: /root
+    register: result
+    when: user_exists.stat.exists == false
+
+  - name: Print stdout
+    ansible.builtin.debug:
+      var: result.stdout
+    when: user_exists.stat.exists == false
+
+  - name: Print Message on how to update password
+    ansible.builtin.debug:
+      msg: "Update password via: docker exec -ti mailserver setup email update ajorians@orians.org NewPasswd"
+    when: user_exists.stat.exists == false
+
+  - name: Create postmaster email alias
+    community.docker.docker_container_exec:
+      container: mailserver
+      command: setup alias add postmaster@orians.org ajorians@orians.org
+      chdir: /root
+    register: result
+    when: user_exists.stat.exists == false
+
+  - name: Create aj email alias
+    community.docker.docker_container_exec:
+      container: mailserver
+      command: setup alias add aj@orians.org ajorians@orians.org
+      chdir: /root
+    register: result
+    when: user_exists.stat.exists == false
+
+  - name: Obtain SSL certificate
+    shell: certbot --agree-tos --apache -m ajorians@gmail.com -n -d mail.orians.org
+

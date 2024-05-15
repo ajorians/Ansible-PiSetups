@@ -1,0 +1,68 @@
+# Run with
+# ansible-playbook SetupNextcloud.yml
+# https://nextcloud.com/ 
+
+---
+- name: Setup NextCloud
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/nextcloud
+      - /opt/DockerSwarmData/nextcloud/config
+      - /opt/DockerSwarmData/nextcloud/data
+      - /root/docker
+      - /root/docker/nextcloud
+
+  - name: Create Database
+    community.mysql.mysql_db:
+      login_user: root
+      name:
+        - nextcloud
+      state: present
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: nextuser
+      host: '%'
+      password: nextpassword 
+      priv:
+        'nextcloud.*': 'ALL,GRANT'
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/nextcloud
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy NextCloud from a compose file
+    docker_compose:
+      project_src: /root/docker/nextcloud
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/nextcloud.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName nextcloud.orians.org
+          ServerAlias nextcloud.stage.orians.org nextcloud
+          ProxyPass / http://127.0.0.1:5600/
+          ProxyPassReverse / http://127.0.0.1:5600/
+        </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2

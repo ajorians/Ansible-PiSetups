@@ -1,0 +1,17 @@
+version: "3"
+services:
+  flood:
+    hostname: flood
+    image: jesec/flood:master
+    user: 1000:1000
+    restart: unless-stopped
+    command: --host 0.0.0.0 --port 3001 --allowedpath /data
+    environment:
+      HOME: /config
+    volumes:
+      - /opt/DockerSwarmData/flood/config:/config
+      - /mnt/download_files:/data
+      - /opt/DockerSwarmData/rtorrent:/socket # so /socket/rpc.socket
+    ports:
+      - 3001:3001
+

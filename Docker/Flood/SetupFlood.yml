@@ -1,0 +1,55 @@
+# Run with
+# ansible-playbook SetupFlood.yml
+# https://flood.js.org/
+
+---
+- name: Setup Flood
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/flood
+      - /opt/DockerSwarmData/flood/config
+      - /root/docker
+      - /root/docker/flood
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/flood
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Flood from a compose file
+    docker_compose:
+      project_src: /root/docker/flood
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/flood.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName flood.orians.org
+          ServerAlias download.orians.org downloads.orians.org flood
+          ProxyPass / http://127.0.0.1:3001/
+          ProxyPassReverse / http://127.0.0.3001/
+        </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+
+  - name: Print how to connect witth Flood
+    ansible.builtin.debug:
+      msg: "RTorrent exposes /opt/DockerSwarmData/rtorrent/rpc.socket so the way
+           the Docker container is setup it would be /socket/rpc.socket"
