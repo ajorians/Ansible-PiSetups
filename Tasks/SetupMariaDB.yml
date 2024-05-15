@@ -55,8 +55,7 @@
     ignore_errors: yes
 
   - name: Set root password
-    mysql_user:
-      user=root
-      password="{{ databasepasswd }}"
-      host=localhost
+    shell: mysqladmin -u root --password="{{ databasepasswd }}" password "{{ databasepasswd }}"
+    no_log: true
     when: is_root_password_set.rc == 0
+
