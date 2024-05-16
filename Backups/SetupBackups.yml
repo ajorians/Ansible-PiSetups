@@ -1,0 +1,33 @@
+# Run with:
+# ansible-playbook SetupBackups.yml
+
+---
+- name: Setup Backups
+  hosts: all
+  tasks:
+
+  - name: Create directory for backups
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /mnt/backups
+      - /mnt/backups/mediawiki
+
+  - name: Copy the copy script file with owner and permissions
+    ansible.builtin.copy:
+      src: RestoreMediaWiki.sh
+      dest: /mnt/backups
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Ensure a job that restores the MediaWiki data"
+    ansible.builtin.cron:
+      name: "Restore MediaWiki data"
+      minute: "0"
+      hour: "4"
+      job: "/mnt/backups/RestoreMediaWiki.sh"

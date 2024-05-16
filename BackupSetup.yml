@@ -1,0 +1,11 @@
+# Run with:
+# ansible-playbook -i inventory.ini BackupSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
+- import_playbook: Docker/ResilioSync/SetupResilioSync.yml
+
+- import_playbook: Tasks/InstallCron.yml
+- import_playbook: Backups/SetupBackups.yml
+
