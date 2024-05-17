@@ -7,5 +7,6 @@
 - import_playbook: Docker/ResilioSync/SetupResilioSync.yml
 
 - import_playbook: Tasks/InstallCron.yml
+- import_playbook: Backups/SetupVHosts.yml
 - import_playbook: Backups/SetupBackups.yml
 

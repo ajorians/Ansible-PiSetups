@@ -1,0 +1,64 @@
+# Run with:
+# ansible-playbook SetupVHosts.yml
+
+---
+- name: Setup Virtual Hosts
+  hosts: all
+  vars:
+    ansible_python_interpreter: /bin/python3
+  tasks:
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/mediawiki.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ServerAdmin webmaster@localhost
+           DocumentRoot /srv/www/htdocs/mediawiki-1.39.3
+           ServerName wiki.orians.org
+           ServerAlias wikibackup.orians.org
+           <Directory /srv/www/htdocs/mediawiki-1.39.3>
+              Options All
+              AllowOverride All
+           </Directory>
+         </VirtualHost>
+    notify:
+    - Restart Apache2 service
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: birthdaysuser
+      host: 'localhost'
+      password: birthdayspassword
+      priv:
+        'birthdays.*': 'ALL,GRANT'
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/birthdays.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ServerAdmin webmaster@localhost
+           DocumentRoot /srv/www/htdocs/birthdays/src
+           ServerName birthdays.orians.org
+           ServerAlias birthdaysbackup.orians.org
+           <Directory /srv/www/htdocs/birthdays/src>
+              Options All
+              AllowOverride All
+           </Directory>
+         </VirtualHost>
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
+

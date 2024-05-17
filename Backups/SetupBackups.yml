@@ -44,7 +44,7 @@
   - name: Ensure a job that restores the Birthdays data"
     ansible.builtin.cron:
       name: "Restore Birthdays data"
-      minute: "0"
+      minute: "5"
       hour: "4"
       job: "/mnt/backups/RestoreBirthdays.sh"
 

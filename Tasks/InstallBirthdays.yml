@@ -1,0 +1,90 @@
+# Run with:
+# ansible-playbook InstallBirthdays.yml
+
+---
+- name: Setup Birthday Site
+  hosts: all
+  tasks:
+
+  - name: check if Birthdays exists
+    stat: 
+      path: /srv/www/htdocs/birthdays
+    register: birthdays_exists
+
+  - name: Checkout from github
+    ansible.builtin.git:
+      repo: https://github.com/ajorians/birthdays
+      dest: /srv/www/htdocs/birthdays
+    when: birthdays_exists.stat.exists == false
+    notify:
+    - Restart Apache2 service
+
+  - name: Configure username
+    ansible.builtin.lineinfile:
+      path: /srv/www/htdocs/birthdays/src/index.php
+      regexp: '^\$username ='
+      line: '$username = "birthdaysuser";'
+    notify:
+    - Restart Apache2 service
+
+  - name: Configure password
+    ansible.builtin.lineinfile:
+      path: /srv/www/htdocs/birthdays/src/index.php
+      regexp: '^\$password ='
+      line: '$password = "birthdayspassword";'
+    notify:
+    - Restart Apache2 service
+
+  - name: Configure database
+    ansible.builtin.lineinfile:
+      path: /srv/www/htdocs/birthdays/src/index.php
+      regexp: '^\$dbname ='
+      line: '$dbname = "birthdays";'
+    notify:
+    - Restart Apache2 service
+
+  - name: Create Database
+    community.mysql.mysql_db:
+      login_user: root
+      name:
+        - birthdays
+      state: present
+    notify:
+    - Restart Apache2 service
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: birthdaysuser
+      host: 'localhost'
+      password: birthdayspassword 
+      priv:
+        'birthdays.*': 'ALL,GRANT'
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/birthdays.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ServerAdmin webmaster@localhost
+           DocumentRoot /srv/www/htdocs/birthdays/src
+           ServerName birthdays.orians.org
+           ServerAlias birthday.orians.org
+           <Directory /srv/www/htdocs/birthdays/src>
+              Options All
+              AllowOverride All
+           </Directory>
+         </VirtualHost>
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
+

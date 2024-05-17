@@ -11,8 +11,6 @@
 
 - import_playbook: Tasks/InitDockerSwarm.yml
 
-- import_playbook: ServerSetup/Birthdays.yml
-
 - import_playbook: ServerSetup/wgeasy/InstalWGEasy.yml
 - import_playbook: ServerSetup/wgeasy/SetupWGEasy.yml
 
