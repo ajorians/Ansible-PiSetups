@@ -56,6 +56,36 @@
     notify:
     - Restart Apache2 service
 
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: backdropuser
+      host: 'localhost'
+      password: backdroppassword
+      priv:
+        'backdrop.*': 'ALL,GRANT'
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/backdrop.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ServerAdmin webmaster@localhost
+           DocumentRoot /srv/www/htdocs/backdrop
+           ServerName backdropbackup.orians.org
+           ServerAlias wwwbackup.orians.org
+           <Directory /srv/www/htdocs/backdrop>
+              Options All
+              AllowOverride All
+           </Directory>
+         </VirtualHost>
+    notify:
+    - Restart Apache2 service
+
   handlers:
     - name: Restart Apache2 service
       ansible.builtin.systemd:
