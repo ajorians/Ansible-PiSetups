@@ -7,6 +7,7 @@
 - import_playbook: Tasks/ZypperUpdate.yml
 - import_playbook: Tasks/InstallAnsible.yml
 - import_playbook: Tasks/InstallDocker.yml
+#- import_playbook: Tasks/SetupDockerHub.yml
 - import_playbook: Tasks/InstallGit.yml
 - import_playbook: Tasks/SetupGitCredentials.yml
 - import_playbook: Tasks/InstallSubversion.yml
