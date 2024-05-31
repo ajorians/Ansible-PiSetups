@@ -36,7 +36,7 @@
       mode: 0777
 
   - name: Deploy Jellyfin from a compose file
-    docker_compose:
+    community.docker.docker_compose_v2:
       project_src: /root/docker/jellyfin
 
   - name: Make Apache VHost file
@@ -45,7 +45,7 @@
       force: false
       content: |
         <VirtualHost *:80>
-          ServerName jellyfin.orians.org
+          ServerName jellyfinlocal.orians.org
           ServerAlias jellyfin.stage.orians.org jellyfin
           ProxyPass / http://127.0.0.1:9000/
           ProxyPassReverse / http://127.0.0.1:9000/
