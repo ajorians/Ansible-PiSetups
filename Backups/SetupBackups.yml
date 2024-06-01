@@ -18,6 +18,8 @@
       - /mnt/backups/mediawiki
       - /mnt/backups/birthdays
       - /mnt/backups/backdrop
+      - /mnt/backups/mailserver
+      - /mnt/backups/snappymail
 
   - name: Copy the copy script file with owner and permissions
     ansible.builtin.copy:
@@ -57,12 +59,42 @@
       group: users
       mode: 0777
 
-  - name: Ensure a job that restores the Backdrop data"
+  - name: Ensure a job that restores the Backdrop data
     ansible.builtin.cron:
       name: "Restore Backdrop data"
       minute: "10"
       hour: "4"
       job: "/mnt/backups/RestoreBackdrop.sh"
+
+  - name: Copy the copy script file with owner and permissions
+    ansible.builtin.copy:
+      src: RestoreMailServer.sh
+      dest: /mnt/backups
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Ensure a job that restores the MailServer data
+    ansible.builtin.cron:
+      name: "Restore MailServer data"
+      minute: "15"
+      hour: "4"
+      job: "/mnt/backups/RestoreMailServer.sh"
+
+  - name: Copy the copy script file with owner and permissions
+    ansible.builtin.copy:
+      src: RestoreSnappyMail.sh
+      dest: /mnt/backups
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Ensure a job that restores the SnappyMail data
+    ansible.builtin.cron:
+      name: "Restore SnappyMail data"
+      minute: "20"
+      hour: "4"
+      job: "/mnt/backups/RestoreSnappyMail.sh"
 
   - name: Restart Cron service
     ansible.builtin.systemd:
