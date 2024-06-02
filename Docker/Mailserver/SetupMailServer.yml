@@ -32,6 +32,6 @@
       mode: 0777
 
   - name: Deploy Mailserver from a compose file
-    docker_compose:
+    community.docker.docker_compose_v2:
       project_src: /root/docker/mailserver
 

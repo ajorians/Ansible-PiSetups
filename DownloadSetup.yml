@@ -1,0 +1,20 @@
+# Run with:
+# ansible-playbook -i inventory.ini BackupSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
+- import_playbook: Docker/ResilioSync/SetupResilioSync.yml
+- import_playbook: Tasks/InstallRTorrent.yml
+- import_playbook: Tasks/InstallUnrar.yml
+- import_playbook: Tasks/InstallSamba.yml
+
+- import_playbook: Tasks/InstallVSFTP.yml
+
+- import_playbook: ExternalHD/FStabHD.yml
+- import_playbook: ExternalHD/ExternalDownload.yml
+- import_playbook: ExternalHD/ExternalFTP.yml
+- import_playbook: ExternalHD/SambaDirectories.yml
+
+- import_playbook: Tasks/InstallApache2.yml
+- import_playbook: Tasks/SetupSyncApachePage.yml 

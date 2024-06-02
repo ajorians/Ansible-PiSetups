@@ -86,6 +86,24 @@
     notify:
     - Restart Apache2 service
 
+  - name: Make Mail Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/mail.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ServerAdmin webmaster@localhost
+           DocumentRoot /srv/www/htdocs/backdrop
+           ServerName mail.orians.org
+           ServerAlias mailbackup.orians.org
+           <Directory /srv/www/htdocs/snappymail>
+              Options All
+              AllowOverride All
+           </Directory>
+         </VirtualHost>
+    notify:
+    - Restart Apache2 service
+
   handlers:
     - name: Restart Apache2 service
       ansible.builtin.systemd:

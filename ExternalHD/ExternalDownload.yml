@@ -1,0 +1,22 @@
+# Run with:
+# ansible-playbook ExternalDownload.yml
+
+---
+- name: Configure Downloading to External Hard Drive
+  hosts: all
+  tasks:
+
+  - name: Create external download files directory
+    ansible.builtin.file:
+      path: /mnt/external/download_files
+      owner: ajorians
+      group: users
+      mode: '0755'
+      state: directory
+
+  - name: Set download directory
+    ansible.builtin.lineinfile:
+      path: /home/ajorians/.rtorrent.rc
+      regexp: '^method.insert\s=\scfg.download'
+      line: 'method.insert = cfg.download, private|const|string, "/mnt/external/download_files"'
+

@@ -1,0 +1,28 @@
+# Run with:
+# ansible-playbook ExternalFTP.yml
+
+---
+- name: Configure FTP to External Hard Drive
+  hosts: all
+  tasks:
+
+  - name: Create download files directory in FTP location
+    ansible.builtin.file:
+      path: /srv/ftp/download_files
+      owner: ajorians
+      group: users
+      mode: '0755'
+      state: directory
+
+  - name: Set bind in fstab
+    ansible.builtin.lineinfile:
+      path: /etc/fstab
+      line: '/mnt/external/download_files /srv/ftp/download_files none bind 0 0'
+
+  - name: Reload mount points
+    shell: mount -a 
+
+  - name: Start FTP service
+    ansible.builtin.systemd:
+      state: restarted
+      name: vsftpd

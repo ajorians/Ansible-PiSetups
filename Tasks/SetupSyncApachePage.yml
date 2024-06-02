@@ -1,0 +1,26 @@
+# Run with:
+# ansible-playbook SetupSyncApachePage.yml
+
+---
+- name: Setup Resilio Sync Apache Page
+  hosts: all
+  tasks:
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/downloadsync.conf
+      force: false
+      content: |
+         <VirtualHost *:80>
+           ProxyPreserveHost On
+           ProxyRequests Off
+           ServerName downloadsync.orians.org
+           ServerAlias downloadsync
+           ProxyPass / http://localhost:8888/
+           ProxyPassReverse / http://localhost:8888/
+         </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2

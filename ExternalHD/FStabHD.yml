@@ -1,0 +1,24 @@
+# Run with:
+# ansible-playbook FStabHD.yml
+
+---
+- name: Configure External Hard Drive
+  hosts: all
+  tasks:
+
+  - name: Create /mnt/external directory
+    ansible.builtin.file:
+      path: /mnt/external
+      owner: ajorians
+      group: users
+      mode: '0755'
+      state: directory
+
+  - name: Set bind in fstab
+    ansible.builtin.lineinfile:
+      path: /etc/fstab
+      line: '/dev/sda1 /mnt/external auto defaults 0 0'
+
+  - name: Reload mount points
+    shell: mount -a 
+

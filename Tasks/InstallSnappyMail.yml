@@ -1,0 +1,75 @@
+# Run with:
+# ansible-playbook InstallSnappyMail.yml
+
+---
+- name: Install SnappyMail
+  hosts: all
+  tasks:
+
+  - name: Make server directory for SnappyMail
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: wwwrun
+      group: www
+      mode: 0755
+    loop:
+      - /srv/www/htdocs/snappymail
+
+  - name: Download SnappyMail from Github
+    ansible.builtin.get_url:
+      url: https://github.com/the-djmaze/snappymail/releases/download/v2.36.1/snappymail-2.36.1.tar.gz
+      dest: /srv/www/htdocs/snappymail/snappymail-2.36.1.tar.gz
+      mode: '0755'
+      owner: wwwrun
+      group: www
+      force: false
+
+  - name: Extract snappymail download
+    ansible.builtin.unarchive:
+      owner: wwwrun
+      group: www
+      src: /srv/www/htdocs/snappymail/snappymail-2.36.1.tar.gz
+      dest: /srv/www/htdocs/snappymail
+      remote_src: yes
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/mail.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerAdmin webmaster@localhost
+          DocumentRoot /srv/www/htdocs/snappymail
+
+          ServerName mailbackup.orians.org
+          ServerAlias mail.stage.orians.org rainloop.orians.org snappymail.orians.org
+
+          <Directory /srv/www/htdocs/snappymail>
+             Options All
+             AllowOverride All
+          </Directory>
+        </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+
+# Admin password file is only created when you navigate with web browser to: http://mail.orians.org/?admin
+
+  - name: Print Snappymail admin passwd information
+    ansible.builtin.debug:
+      msg: "Navigate to mailserver?admin and an admin_password.txt file will be created"
+
+#  - name: Display admin_password contents
+#    ansible.builtin.slurp:
+#      src: /srv/www/htdocs/snappymail/data/_data_/_default_/admin_password.txt
+#    register: snappymail_adminpasswd
+
+        #  - name: Print Snappymail admin passwd information
+        #    ansible.builtin.debug:
+        #      msg: "{{ snappymail_adminpasswd['content'] | b64decode }}"
+  
+# Be sure to configure and then change admin password!
+#
