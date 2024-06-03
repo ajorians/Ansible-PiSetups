@@ -40,7 +40,7 @@
       force: false
       content: |
         <VirtualHost *:80>
-          ServerName datapi1sync.orians.org
+          ServerName {{resilio_sync_url}}
           ProxyPass / http://127.0.0.1:9200/
           ProxyPassReverse / http://127.0.0.9200/
         </VirtualHost>
