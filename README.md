@@ -11,6 +11,10 @@ To persist it: ssh-copy-id root@server
 You can run a playbook on a subset of the machines like so:
 ansible-playbook -i inventory.ini BasicSetupSteps.yml --ask-vault-pass --limit 'asterisk'
 
+## Machines
+ansible-playbook -i inventory.ini BackupSetup.yml --limit 'backups' --ask-vault-pass
+ansible-playbook -i inventory.ini DownloadSetup.yml --limit 'download' --ask-vault-pass
+
 ## Files
 Task/* - Tasks Playbooks.  Some tweaked for a particular host; should probably make generic
 Docker/* - Specific Playbooks that setup a Docker container
