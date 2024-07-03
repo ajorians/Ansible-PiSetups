@@ -14,6 +14,7 @@ ansible-playbook -i inventory.ini BasicSetupSteps.yml --ask-vault-pass --limit '
 ## Machines
 ansible-playbook -i inventory.ini BackupSetup.yml --limit 'backups' --ask-vault-pass
 ansible-playbook -i inventory.ini DownloadSetup.yml --limit 'download' --ask-vault-pass
+ansible-playbook -i inventory.ini VPNSetup.yml --limit 'vpn' --ask-vault-pass
 
 ## Files
 Task/* - Tasks Playbooks.  Some tweaked for a particular host; should probably make generic

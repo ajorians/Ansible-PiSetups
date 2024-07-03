@@ -4,7 +4,7 @@
 
 ---
 - name: Setup WG-Easy
-  hosts: cms
+  hosts: vpn
   tasks:
 
   - name: Make Apache VHost file
