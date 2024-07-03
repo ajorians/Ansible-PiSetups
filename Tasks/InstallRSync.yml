@@ -1,0 +1,12 @@
+# Run with:
+# ansible-playbook InstallRSync.yml
+
+---
+- name: Install RSync
+  hosts: all
+  tasks:
+
+  - name: Install RSync package on OpenSUSE/SUSE Linux
+    zypper:
+      name: rsync
+      state: present
