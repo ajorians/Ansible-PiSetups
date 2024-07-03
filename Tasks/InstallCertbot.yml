@@ -3,7 +3,7 @@
 
 ---
 - name: Install CertBot
-  hosts: cms
+  hosts: all
   tasks:
 
   - name: Install Certbot package on OpenSUSE/SUSE Linux

@@ -2,9 +2,11 @@
 # ansible-playbook SetupWGEasy.yml
 # https://github.com/wg-easy/wg-easy
 
+#CMS uses nginx manager now
+
 ---
 - name: Setup WG-Easy
-  hosts: vpn
+  hosts: cms
   tasks:
 
   - name: Make Apache VHost file

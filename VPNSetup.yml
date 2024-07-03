@@ -5,6 +5,4 @@
 - import_playbook: BasicSetupSteps.yml
 
 - import_playbook: ServerSetup/wg-easy/InstallWGEasy.yml
-- import_playbook: ServerSetup/wg-easy/SetupWGEasy.yml
-
 
