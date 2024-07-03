@@ -15,11 +15,6 @@
       mode: 0777
     loop:
       - /mnt/backups
-      - /mnt/backups/mediawiki
-      - /mnt/backups/birthdays
-      - /mnt/backups/backdrop
-      - /mnt/backups/mailserver
-      - /mnt/backups/snappymail
 
   - name: Copy the copy script file with owner and permissions
     ansible.builtin.copy:
