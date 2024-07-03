@@ -1,0 +1,10 @@
+# Run with:
+# ansible-playbook -i inventory.ini CMSSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
+- import_playbook: Tasks/InstallVSFTP.yml
+
+- import_playbook: ServerSetup/nginx_proxy_manager/InstallNginxProxyManager.yml 
+
