@@ -60,7 +60,7 @@
     ansible.builtin.systemd:
       name: apache2
       enabled: yes
-    when: "{{use_apache}}"
+    when: use_apache|bool
     notify:
     - Restart Apache2 service
 
