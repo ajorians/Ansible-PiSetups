@@ -1,0 +1,10 @@
+# Run with:
+# ansible-playbook -i inventory.ini DNSSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
+- import_playbook: Docker/PiHole/SetupPiHole.yml
+- import_playbook: Tasks/InstallSamba.yml
+
+

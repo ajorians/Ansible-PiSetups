@@ -1,0 +1,38 @@
+version: "3"
+
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    network_mode: host
+   #ports:
+   #network_mode: host
+     # - "53:53/tcp"
+     # - "53:53/udp"
+     # - "67:67/udp"
+     # - "80:80/tcp"
+     # - "443:443/tcp"
+    environment:
+      TZ: 'America/Detroit'
+      WEBPASSWORD: 'changemeaj'
+      FTLCONF_LOCAL_IPV4: '192.168.0.72'
+      REV_SERVER: 'true'
+      REV_SERVER_DOMAIN: 'local'
+      REV_SERVER_TARGET: '192.168.0.72'
+      REV_SERVER_CIDR: '192.168.0.0/24'
+      #DHCP_ACTIVE: 'true'
+      DHCP_START: '192.168.0.150'
+      DHCP_END: '192.168.0.180'
+      DHCP_ROUTER: 'DHCP_ROUTER'
+      PIHOLE_DOMAIN: 'local'
+      # WEBPASSWORD: 'set a secure password here or it will be random'
+    # Volumes store your data between container upgrades
+    volumes:
+      - '/mnt/DockerSwarmData/pihole/:/etc/pihole/'
+      - '/mnt/DockerSwarmData/dnsmasq/:/etc/dnsmasq.d/'
+    # Recommended but not required (DHCP needs NET_ADMIN)
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped

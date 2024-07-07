@@ -1,0 +1,34 @@
+# Run with
+# ansible-playbook SetupPiHole.yml
+# https://pi-hole.net/
+
+---
+- name: Setup PiHole
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /mnt/DockerSwarmData/pihole
+      - /mnt/DockerSwarmData/dnsmasq
+      - /root/docker
+      - /root/docker/pihole
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/pihole
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy PiHole from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/pihole
+
