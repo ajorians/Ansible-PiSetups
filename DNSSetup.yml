@@ -5,6 +5,7 @@
 - import_playbook: BasicSetupSteps.yml
 
 - import_playbook: Docker/PiHole/SetupPiHole.yml
+- import_playbook: DNS/AddStaticHosts.yml 
 - import_playbook: Tasks/InstallSamba.yml
 
 

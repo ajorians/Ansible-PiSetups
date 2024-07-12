@@ -1,0 +1,386 @@
+[
+ {
+   "MAC": "DC:A6:32:DE:ED:83",
+   "IP": "192.168.0.35",
+   "Hostname": "adc1",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "10:52:1C:7A:1A:78",
+   "IP": "192.168.0.39",
+   "Hostname": "airfryer",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "80:D6:05:DA:8F:A5",
+   "IP": "192.168.0.7",
+   "Hostname": "ajiphone",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "96:96:2F:8B:49:14",
+   "IP": "192.168.0.75",
+   "Hostname": "ajiphone11",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "8E:F5:B3:9F:D4:98",
+   "IP": "192.168.0.77",
+   "Hostname": "ajiphone115g",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "0E:64:33:61:25:D0",
+   "IP": "192.168.0.76",
+   "Hostname": "ajiphone11g",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "88:A4:79:AA:91:28",
+   "IP": "192.168.0.78",
+   "Hostname": "ajiphone11macaddr",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "18:5E:0F:7C:A9:E3",
+   "IP": "192.168.0.21",
+   "Hostname": "ajlaptop",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "00:E0:4C:68:3B:46",
+   "IP": "192.168.0.53",
+   "Hostname": "ajlaptopwired",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "3C:22:FB:28:3E:F4",
+   "IP": "192.168.0.23",
+   "Hostname": "ajworkmacbook",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "00:E0:4C:68:42:FD",
+   "IP": "192.168.0.52",
+   "Hostname": "ajworkmacwired",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "34:D2:70:7C:69:1A",
+   "IP": "192.168.0.19",
+   "Hostname": "amazonecho",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "FC:A6:67:DF:8E:F8",
+   "IP": "192.168.0.18",
+   "Hostname": "amazonechomini",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "C0:74:AD:24:7D:A0",
+   "IP": "192.168.0.33",
+   "Hostname": "androidipphone",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "00:24:8C:47:AE:E4",
+   "IP": "192.168.0.2",
+   "Hostname": "asterisk",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:6B:71:EB",
+   "IP": "192.168.0.72",
+   "Hostname": "asteriskpi",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "22:D7:8A:9E:06:63",
+   "IP": "192.168.0.73",
+   "Hostname": "britiphone13",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "18:3E:EF:45:46:18",
+   "IP": "192.168.0.81",
+   "Hostname": "brittanyapplewatch",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "02:A8:E8:39:E6:95",
+   "IP": "192.168.0.30",
+   "Hostname": "brittanyiphone11pro",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "70:22:FE:9A:EF:5C",
+   "IP": "192.168.0.80",
+   "Hostname": "brittanyiphone13",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "F0:18:98:3F:19:71",
+   "IP": "192.168.0.6",
+   "Hostname": "brittanymac",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "E4:5F:01:C5:A8:88",
+   "IP": "192.168.0.61",
+   "Hostname": "client1",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:6B:65:8E",
+   "IP": "192.168.0.62",
+   "Hostname": "client2",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:92:12:FA",
+   "IP": "192.168.0.63",
+   "Hostname": "client3",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:9E:0B:18",
+   "IP": "192.168.0.31",
+   "Hostname": "cms",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DA:BF:C0:E5:1D:72",
+   "IP": "192.168.0.71",
+   "Hostname": "crosswavevacuum",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "D8:3A:DD:17:4A:70",
+   "IP": "192.168.0.82",
+   "Hostname": "datapi1",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "B0:C5:54:BD:A3:F1",
+   "IP": "192.168.0.5",
+   "Hostname": "desktop",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "44:8A:5B:A2:BC:91",
+   "IP": "192.168.0.40",
+   "Hostname": "desktopwired",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:21:47:86",
+   "IP": "192.168.0.4",
+   "Hostname": "development",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:94:0E:AF",
+   "IP": "192.168.0.3",
+   "Hostname": "dns",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "E4:5F:01:BB:9C:8E",
+   "IP": "192.168.0.24",
+   "Hostname": "download",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "08:12:A5:DE:18:41",
+   "IP": "192.168.0.25",
+   "Hostname": "echohd",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "9C:A5:70:11:B8:E1",
+   "IP": "192.168.0.44",
+   "Hostname": "eerobasement",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "9C:A5:70:11:B8:ED",
+   "IP": "192.168.0.47",
+   "Hostname": "eerodownstairs",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "9C:A5:70:1E:DB:6D",
+   "IP": "192.168.0.46",
+   "Hostname": "eerokitchen",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "9C:A5:70:1F:8D:6D",
+   "IP": "192.168.0.45",
+   "Hostname": "eerooffice",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "E4:5F:01:E2:9A:6C",
+   "IP": "192.168.0.60",
+   "Hostname": "host",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "B0:5A:DA:8B:25:99",
+   "IP": "192.168.0.12",
+   "Hostname": "hpprinter",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "C0:74:AD:34:0D:23",
+   "IP": "192.168.0.8",
+   "Hostname": "ht814",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "C0:F2:FB:76:96:B3",
+   "IP": "192.168.0.51",
+   "Hostname": "ipad",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "A0:A3:B3:C6:29:F0",
+   "IP": "192.168.0.87",
+   "Hostname": "livroomcouchtoplight",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "60:64:05:67:A5:1C",
+   "IP": "192.168.0.13",
+   "Hostname": "lutron",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:FE:DD:F0",
+   "IP": "192.168.0.200",
+   "Hostname": "mattpbx",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "18:B4:30:8A:01:CF",
+   "IP": "192.168.0.9",
+   "Hostname": "nestcamera",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "64:16:66:D3:3C:85",
+   "IP": "192.168.0.22",
+   "Hostname": "nestsmokedetector",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "18:B4:30:88:41:8C",
+   "IP": "192.168.0.20",
+   "Hostname": "nestthermastat",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "B8:78:26:3F:2B:1C",
+   "IP": "192.168.0.15",
+   "Hostname": "nintendoswitch",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "00:10:99:31:67:D3",
+   "IP": "192.168.0.55",
+   "Hostname": "oculus",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "2C:44:FD:1C:40:62",
+   "IP": "192.168.0.90",
+   "Hostname": "pbx",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:31:D8:73",
+   "IP": "192.168.0.41",
+   "Hostname": "photos",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "E4:5F:01:BA:3C:C0",
+   "IP": "192.168.0.48",
+   "Hostname": "piboardlite",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "D8:3A:DD:02:82:CB",
+   "IP": "192.168.0.10",
+   "Hostname": "pivpn",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "E4:5F:01:7B:DA:91",
+   "IP": "192.168.0.56",
+   "Hostname": "pizero2w",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "DC:A6:32:E8:D9:50",
+   "IP": "192.168.0.38",
+   "Hostname": "pxe",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "D8:3A:DD:05:BB:AE",
+   "IP": "192.168.0.74",
+   "Hostname": "raspberry400",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "B8:BB:AF:E8:1B:C3",
+   "IP": "192.168.0.17",
+   "Hostname": "samsungtv",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "60:6D:C7:1E:DB:DD",
+   "IP": "192.168.0.14",
+   "Hostname": "sonytv",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "AC:9B:0A:B9:E7:02",
+   "IP": "192.168.0.42",
+   "Hostname": "sonytvwired",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "C8:9E:43:A5:E5:D9",
+   "IP": "192.168.0.43",
+   "Hostname": "switchbasement",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "00:11:D9:A5:92:D0",
+   "IP": "192.168.0.11",
+   "Hostname": "tivo",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "08:00:27:90:8A:F8",
+   "IP": "192.168.0.50",
+   "Hostname": "virtualbox",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "D8:A0:11:E7:86:E7",
+   "IP": "192.168.0.86",
+   "Hostname": "wiz_e786e7",
+   "FIELD4": ""
+ },
+ {
+   "MAC": "3C:F0:11:DB:B2:53",
+   "IP": "192.168.0.70",
+   "Hostname": "workdesktop",
+   "FIELD4": ""
+ }
+]

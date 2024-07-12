@@ -1,0 +1,38 @@
+# Run with
+# ansible-playbook AddStaticHosts.yml
+
+---
+- name: Add Static Hosts
+  hosts: all
+  tasks:
+
+  - name: Create directory for script and data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /root/pihole
+
+  - name: Copy the host data file with owner and permissions
+    ansible.builtin.copy:
+      src: data.json
+      dest: /root/pihole
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Copy the script file with owner and permissions
+    ansible.builtin.copy:
+      src: addStaticHosts.sh
+      dest: /root/pihole
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Run script that will add static hosts
+    ansible.builtin.shell: ./addStaticHosts.sh
+    args:
+      chdir: /root/pihole/
