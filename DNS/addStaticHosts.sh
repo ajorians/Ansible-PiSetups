@@ -2,7 +2,7 @@
 
 rm cookie.txt
 
-HOSTNAME="http://192.168.0.72"
+HOSTNAME="http://192.168.0.3"
 PASSWORD="changemeaj"
 
 USER_AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"

@@ -18,6 +18,7 @@ ansible-playbook -i inventory.ini DownloadSetup.yml --limit 'download' --ask-vau
 ansible-playbook -i inventory.ini VPNSetup.yml --limit 'vpn' --ask-vault-pass
 
 Mirrors isn't setup or ready yet.
+DNS isn't fully setup or ready yet.
 
 ## Files
 Task/* - Tasks Playbooks.  Some tweaked for a particular host; should probably make generic
