@@ -1,0 +1,57 @@
+# Run with:
+# ansible-playbook InstallFail2Ban.yml
+
+---
+- name: Install Fail2Ban
+  hosts: all
+  tasks:
+
+  - name: Install Fail2Ban package on OpenSUSE/SUSE Linux
+    zypper:
+      name: fail2ban
+      state: present
+
+  - name: Enable rule for Asterisk
+    community.general.ini_file:
+      path: /etc/fail2ban/jail.conf
+      section: asterisk
+      option: enabled
+      value: true
+
+  - name: Enable rule for SSH
+    community.general.ini_file:
+      path: /etc/fail2ban/jail.conf
+      section: ssh
+      option: enabled 
+      value: true
+
+  - name: Enable rule for mail
+    community.general.ini_file:
+      path: /etc/fail2ban/jail.conf
+      section: courier-auth
+      option: enabled 
+      value: true
+
+  - name: Enable rule for Postfix
+    community.general.ini_file:
+      path: /etc/fail2ban/jail.conf
+      section: postfix
+      option: enabled 
+      value: true
+
+  - name: Enable rule for MySQL
+    community.general.ini_file:
+      path: /etc/fail2ban/jail.conf
+      section: mysqld-auth
+      option: enabled
+      value: true
+
+  - name: Start Fail2Ban service
+    ansible.builtin.systemd:
+      state: restarted
+      name: fail2ban
+
+  - name: Enable Fail2Ban service
+    ansible.builtin.systemd:
+      name: fail2ban
+      enabled: yes

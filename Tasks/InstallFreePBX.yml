@@ -201,12 +201,12 @@
 
   - name: Make VHost file
     ansible.builtin.copy:
-      dest: /etc/apache2/vhosts.d/testfreepbx.conf
+      dest: /etc/apache2/vhosts.d/freepbx.conf
       content: |
         <VirtualHost *:80>
           ServerAdmin webmaster@localhost
-          ServerName testfreepbx.orians.org
-          ServerAlias testfreepbx
+          ServerName {{freepbx_url}}
+          ServerAlias freepbx
           DocumentRoot "/srv/www/htdocs/freepbx"
           <Directory /srv/www/htdocs/freepbx>
             Options All

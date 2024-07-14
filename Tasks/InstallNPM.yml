@@ -8,5 +8,5 @@
 
   - name: Install NPM package on OpenSUSE/SUSE Linux
     zypper:
-      name: npm21
+      name: npm22
       state: present
