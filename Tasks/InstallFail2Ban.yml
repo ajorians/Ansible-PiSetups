@@ -18,10 +18,17 @@
       option: enabled
       value: true
 
+  - name: Set log for Asterisk
+    community.general.ini_file:
+      path: /etc/fail2ban/jail.conf
+      section: asterisk
+      option: logpath
+      value: /var/log/asterisk/messages.log
+
   - name: Enable rule for SSH
     community.general.ini_file:
       path: /etc/fail2ban/jail.conf
-      section: ssh
+      section: sshd
       option: enabled 
       value: true
 
