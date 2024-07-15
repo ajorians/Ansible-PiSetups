@@ -6,12 +6,68 @@
   hosts: all
   tasks:
 
+#Install some prerequesits
+  - name: Install MPG123 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: mpg123
+      state: present
+
+  - name: Install Autoconf package on OpenSUSE/SUSE Linux
+    zypper:
+      name: autoconf
+      state: present
+
+  - name: Install LibJSonCpp package on OpenSUSE/SUSE Linux
+    zypper:
+      name: libjsoncpp*
+      state: present
+
+  - name: Install Automake package on OpenSUSE/SUSE Linux
+    zypper:
+      name: automake
+      state: present
+
+  - name: Install Flex package on OpenSUSE/SUSE Linux
+    zypper:
+      name: flex
+      state: present
+
+  - name: Install M4 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: m4
+      state: present
+
+  - name: Install NodeJS package on OpenSUSE/SUSE Linux
+    zypper:
+      name: nodejs20
+      state: present
+
+  - name: Install NodeJS-Common package on OpenSUSE/SUSE Linux
+    zypper:
+      name: nodejs-common
+      state: present
+
+  - name: Install NPM package on OpenSUSE/SUSE Linux
+    zypper:
+      name: npm20
+      state: present
+
+  - name: Install UnixODBC package on OpenSUSE/SUSE Linux
+    zypper:
+      name: unixODBC
+      state: present
+
+  - name: Install UnixODBC-devel package on OpenSUSE/SUSE Linux
+    zypper:
+      name: unixODBC-devel
+      state: present
+
   - name: Check if Asterisk download exists
     stat:
       path: /root/asterisk-21.3.1.tar.gz
     register: asterisk_exists
 
-  - name: Download Asterisk 21.3
+  - name: Download Asterisk 21.3.1
     ansible.builtin.get_url:
       url: http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-21.3.1.tar.gz
       dest: /root/asterisk-21.3.1.tar.gz
