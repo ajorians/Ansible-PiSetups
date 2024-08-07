@@ -68,6 +68,7 @@
 
   handlers:
     - name: Restart Apache2 service
+      when: use_apache|default(true)|bool
       ansible.builtin.systemd:
         state: restarted
         name: apache2
