@@ -38,6 +38,6 @@
          http_access allow all
 
   - name: Deploy Squid from a compose file
-    docker_compose:
+    community.docker.docker_compose_v2:
       project_src: /root/docker/squid
 
