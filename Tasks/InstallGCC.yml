@@ -8,7 +8,9 @@
 
   - name: Install GCC packages on OpenSUSE/SUSE Linux
     zypper:
-      name: gcc13*
+      name:
+        - gcc13
+        - gcc13-c++
       state: present
 
   - name: Create a symbolic link
