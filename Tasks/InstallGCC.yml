@@ -18,8 +18,8 @@
   - name: Install GCC package on Raspberian Linux
     apt:
       name:
-        - gcc13
-        - gcc13-c++
+        - gcc-12
+        - g++-12
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") == -1
@@ -29,21 +29,30 @@
       src: /usr/bin/gcc-13
       dest: /usr/bin/gcc
       state: link
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Create a symbolic link
     ansible.builtin.file:
       src: /usr/bin/g++-13
       dest: /usr/bin/g++
       state: link
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Create a symbolic link
     ansible.builtin.file:
       src: /usr/bin/gcc-13
       dest: /usr/bin/cc
       state: link
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Create a symbolic link
     ansible.builtin.file:
       src: /usr/bin/g++-13
       dest: /usr/bin/c++
       state: link
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+

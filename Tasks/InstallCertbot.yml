@@ -10,8 +10,26 @@
     zypper:
       name: python311-certbot
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Certbot package on Raspberian Linux
+    apt:
+      name: python3-certbot
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install Certbot Apache Plugin package on OpenSUSE/SUSE Linux
     zypper:
       name: python311-certbot-apache
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Certbot Apache Plugin package on Raspberian Linux
+    apt:
+      name: python3-certbot-apache
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1

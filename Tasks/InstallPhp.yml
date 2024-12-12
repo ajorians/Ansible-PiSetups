@@ -43,6 +43,24 @@
         - php8-xmlwriter
         - php8-zip
         - php8-zlib
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Install Php 8 extension packages on Raspberian Linux
+    apt:
+      state: present
+      name:
+        - php-curl
+        - php-gd
+        - php-mbstring
+        - php-mysql
+        - php-pear
+        - php-sqlite3
+        - php-zip
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
     notify:
     - Restart Apache2 service
 
@@ -57,12 +75,18 @@
 
   - name: Set max upload filesize
     ansible.builtin.shell: sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php8/apache2/php.ini
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Set memory limit
     ansible.builtin.shell: sed -i 's/\(^memory_limit = \).*/\1256M/' /etc/php8/apache2/php.ini
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Set CLI max upload filesize
     ansible.builtin.shell: sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php8/cli/php.ini
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Enable the Apache2 module 
     community.general.apache2_module:
