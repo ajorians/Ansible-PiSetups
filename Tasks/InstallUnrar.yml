@@ -10,4 +10,13 @@
     zypper:
       name: unrar
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Rar package on Raspberian Linux
+    apt:
+      name: unrar
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 

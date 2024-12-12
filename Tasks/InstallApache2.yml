@@ -10,6 +10,17 @@
     zypper:
       name: apache2
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Install Apache2 package on Raspberian Linux
+    apt:
+      name: apache2
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
     notify:
     - Restart Apache2 service
 
@@ -17,6 +28,8 @@
     zypper:
       name: apache2-utils
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
     notify:
     - Restart Apache2 service
 
@@ -44,6 +57,8 @@
       path: /etc/apache2/httpd.conf
       regexp: '^DirectoryIndex index.html index.html.var'
       replace: 'DirectoryIndex index.html index.htm index.html.var'
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
     notify:
     - Restart Apache2 service
 
@@ -53,6 +68,8 @@
       path: /etc/apache2/default-server.conf
       regexp: 'Options None'
       replace: 'Options All'
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
     notify:
     - Restart Apache2 service
 

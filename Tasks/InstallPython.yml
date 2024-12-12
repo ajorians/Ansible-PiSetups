@@ -10,19 +10,34 @@
     zypper:
       name: python
       state: present
+    when:
+    - ansible_facts['distribution'] == "OpenSuse"
+
+  - name: Install Python package on Raspberian Linux
+    apt:
+      name: python3
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install Python Cryptography package on OpenSUSE/SUSE Linux
     zypper:
       name: python311-cryptography
       state: present
+    when:
+    - ansible_facts['distribution'] == "OpenSuse"
 
   - name: Install Python3 Devel package on OpenSUSE/SUSE Linux
     zypper:
       name: python311-devel
       state: present
+    when:
+    - ansible_facts['distribution'] == "OpenSuse"
 
   # Was needed for setting mysql root password
   - name: Install Python PyMySQL package on OpenSUSE/SUSE Linux
     zypper:
       name: python311-PyMySQL
       state: present
+    when:
+    - ansible_facts['distribution'] == "OpenSuse"

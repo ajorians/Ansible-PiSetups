@@ -10,3 +10,13 @@
     zypper:
       name: plocate
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install PLocate package on Raspberian Linux
+    apt:
+      name: plocate
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

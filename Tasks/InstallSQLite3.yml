@@ -10,14 +10,20 @@
     zypper:
       name: libsqlite3-0
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install SQLite3 package on OpenSUSE/SUSE Linux
     zypper:
       name: sqlite3
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install SQLite3 Devel package on OpenSUSE/SUSE Linux
     zypper:
       name: sqlite3-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 

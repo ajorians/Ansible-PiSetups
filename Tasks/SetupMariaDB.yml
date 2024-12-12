@@ -18,11 +18,24 @@
     zypper:
       name: mariadb
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install MariaDB package on Raspberian Linux
+    apt:
+      name:
+        - mariadb-server
+        - mariadb-client
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install MariaDB ODBC package on OpenSUSE/SUSE Linux
     zypper:
       name: mariadb-connector-odbc
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Make ~/.my.cnf file
     ansible.builtin.copy:
@@ -38,6 +51,8 @@
       regexp: '^bind-address\s+=\s+127.0.0.1'
       replace: '#bind-address = 127.0.0.1'
       backup: yes
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Enable Maria service
     ansible.builtin.systemd:

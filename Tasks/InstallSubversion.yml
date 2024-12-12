@@ -10,4 +10,13 @@
     zypper:
       name: subversion
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Subversion package on Raspberian Linux
+    apt:
+      name: subversion
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 

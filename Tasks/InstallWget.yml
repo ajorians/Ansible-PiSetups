@@ -10,4 +10,6 @@
     zypper:
       name: wget
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 

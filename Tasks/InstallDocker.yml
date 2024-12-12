@@ -10,11 +10,30 @@
     zypper:
       name: docker
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install docker package on Raspberian Linux
+    apt:
+      name: docker
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install docker-compose package on OpenSUSE/SUSE Linux
     zypper:
       name: docker-compose
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install docker-compose package on Raspberian Linux
+    apt:
+      name: docker-compose
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
 
 #  - name: Install docker-compose Python package on OpenSUSE/SUSE Linux
 #    zypper:
@@ -26,17 +45,23 @@
     zypper:
       name: python*-docker
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   # Was needed for Docker Swarm Deploy
   - name: Install JSON Diff for docker package on OpenSUSE/SUSE Linux
     zypper:
       name: python*-jsondiff
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install PIP on OpenSUSE/SUSE Linux
     zypper:
       name: python*-pip
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
 #  - name: Install Docker-Compose python package
 #    ansible.builtin.pip:

@@ -10,9 +10,13 @@
     zypper:
       name: libjansson4
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install Jansson library Devel package on OpenSUSE/SUSE Linux
     zypper:
       name: libjansson-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 

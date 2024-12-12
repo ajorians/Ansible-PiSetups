@@ -10,9 +10,13 @@
     zypper:
       name: libuuid1
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install UUID Devel package on OpenSUSE/SUSE Linux
     zypper:
       name: libuuid-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 

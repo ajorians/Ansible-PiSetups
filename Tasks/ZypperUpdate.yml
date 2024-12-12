@@ -10,6 +10,15 @@
     zypper:
       name: '*'
       state: latest
+    when:
+    - ansible_facts['distribution'] == "OpenSuse"
+
+  - name: Update all packages on Raspberian Linux
+    apt:
+      name: '*'
+      state: latest
+    when:
+    - ansible_facts['distribution'] != "OpenSuse"
 
   - name: Check if a reboot is needed on all SUSE/OpenSUSE based servers
     register: linux_reboot_required_file
@@ -17,7 +26,7 @@
       path: /boot/do_purge_kernels 
       get_checksum: no
 
-  - name: Reboot the SUSE/OpenSUSE box if kernel updated
+  - name: Reboot the box if kernel updated
     reboot:
       msg: "Reboot initiated by Ansible for kernel updates"
       connect_timeout: 5

@@ -7,6 +7,10 @@ That doesn't use a password
 
 To persist it: ssh-copy-id root@server
 
+For Raspberian and similar servers you'll need to edit /etc/ssh/sshd_config
+and change a line to PermitRootLogin yes
+and then systemctl restart ssh.service
+
 ## Usage
 You can run a playbook on a subset of the machines like so:
 ansible-playbook -i inventory.ini BasicSetupSteps.yml --ask-vault-pass --limit 'asterisk'

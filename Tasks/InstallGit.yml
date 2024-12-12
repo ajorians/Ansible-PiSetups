@@ -10,4 +10,13 @@
     zypper:
       name: git
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install git package on Raspberian Linux
+    apt:
+      name: git
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 

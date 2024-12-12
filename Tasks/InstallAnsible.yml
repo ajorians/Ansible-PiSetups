@@ -10,4 +10,12 @@
     zypper:
       name: ansible
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
+  - name: Install Ansible package on Raspberian Linux
+    apt:
+      name: ansible
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1

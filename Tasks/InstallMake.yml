@@ -10,8 +10,12 @@
     zypper:
       name: make
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install MakeInfo package on OpenSUSE/SUSE Linux
     zypper:
       name: makeinfo
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1

@@ -10,6 +10,8 @@
     zypper:
       name: php8
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
     notify:
     - Restart Apache2 service
 
@@ -48,6 +50,8 @@
     zypper:
       name: apache2-mod_php8
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
     notify:
     - Restart Apache2 service
 

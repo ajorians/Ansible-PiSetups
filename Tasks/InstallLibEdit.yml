@@ -10,9 +10,13 @@
     zypper:
       name: libedit0
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install LibEdit Devel package on OpenSUSE/SUSE Linux
     zypper:
       name: libedit-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 

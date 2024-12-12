@@ -10,9 +10,13 @@
     zypper:
       name: libxml2-2
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install LibXML2 Devel package on OpenSUSE/SUSE Linux
     zypper:
       name: libxml2-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 

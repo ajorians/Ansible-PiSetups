@@ -10,6 +10,15 @@
     zypper:
       name: vsftpd
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install VSFTP package on Rasbian Linux
+    apt:
+      name: vsftpd
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Enable upload capability
     ansible.builtin.lineinfile:

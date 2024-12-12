@@ -10,11 +10,22 @@
     zypper:
       name: samba
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Samba package on Raspberian Linux
+    apt:
+      name: samba
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install Samba YAST2 package on OpenSUSE/SUSE Linux
     zypper:
       name: yast2-samba-server
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Enable Samba service
     ansible.builtin.systemd:
