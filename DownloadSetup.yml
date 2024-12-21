@@ -4,7 +4,7 @@
 ---
 - import_playbook: BasicSetupSteps.yml
 
-- import_playbook: Docker/ResilioSync/SetupResilioSync.yml
+- import_playbook: Docker/ResilioSync/download/SetupResilioSync.yml
 - import_playbook: Tasks/InstallRTorrent.yml
 - import_playbook: Tasks/InstallUnrar.yml
 

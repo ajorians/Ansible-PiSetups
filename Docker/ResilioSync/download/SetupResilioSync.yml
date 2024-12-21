@@ -1,0 +1,60 @@
+# Run with
+# ansible-playbook SetupResilioSync.yml
+# https://www.resilio.com/individuals/
+
+---
+- name: Setup Resilio-Sync
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /mnt/DockerSwarmData/resiliosync
+      - /mnt/DockerSwarmData/resiliosync/config
+      - /mnt/DockerSwarmData/resiliosync/downloads
+      - /root/docker
+      - /root/docker/resiliosync
+      - /mnt/backups
+      - /mnt/external/sync
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/resiliosync
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Resilio-Sync from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/resiliosync
+
+  - name: Print Message on mount points
+    ansible.builtin.debug:
+      msg: "Backups are in /Backups and sync things are /Sync"
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/resiliosync.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName {{resilio_sync_url}}
+          ProxyPass / http://127.0.0.1:9200/
+          ProxyPassReverse / http://127.0.0.9200/
+        </VirtualHost>
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
+
