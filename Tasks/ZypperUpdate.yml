@@ -11,14 +11,14 @@
       name: '*'
       state: latest
     when:
-    - ansible_facts['distribution'] == "OpenSuse"
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Update all packages on Raspberian Linux
     apt:
       name: '*'
       state: latest
     when:
-    - ansible_facts['distribution'] != "OpenSuse"
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Check if a reboot is needed on all SUSE/OpenSUSE based servers
     register: linux_reboot_required_file
