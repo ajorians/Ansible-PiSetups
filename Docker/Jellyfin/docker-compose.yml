@@ -18,8 +18,8 @@ services:
       - /mnt/allwrite/new:/data/new
       - /mnt/allwrite/brittany:/data/brittany
     ports:
-      - 9000:8096
-      - 9001:8920 #optional
-      - 9002:7359/udp #optional
-      - 9003:1900/udp #optional
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
     restart: unless-stopped
