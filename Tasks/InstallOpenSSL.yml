@@ -10,4 +10,12 @@
     zypper:
       name: libopenssl-3-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
+  - name: Install OpenSSL package on OpenSUSE/SUSE Linux
+    zypper:
+      name: openssl-3
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1

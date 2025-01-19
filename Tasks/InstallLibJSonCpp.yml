@@ -8,6 +8,6 @@
 
   - name: Install LibJSonCpp package on OpenSUSE/SUSE Linux
     zypper:
-      name: libjsoncpp25
+      name: libjsoncpp26
       state: present
 

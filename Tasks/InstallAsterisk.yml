@@ -39,7 +39,7 @@
 
   - name: Install NodeJS package on OpenSUSE/SUSE Linux
     zypper:
-      name: nodejs20
+      name: nodejs22
       state: present
 
   - name: Install NodeJS-Common package on OpenSUSE/SUSE Linux
@@ -49,7 +49,7 @@
 
   - name: Install NPM package on OpenSUSE/SUSE Linux
     zypper:
-      name: npm20
+      name: npm22
       state: present
 
   - name: Install UnixODBC package on OpenSUSE/SUSE Linux
@@ -64,80 +64,80 @@
 
   - name: Check if Asterisk download exists
     stat:
-      path: /root/asterisk-21.3.1.tar.gz
+      path: /root/asterisk-22.1.0.tar.gz
     register: asterisk_exists
 
-  - name: Download Asterisk 21.3.1
+  - name: Download Asterisk 22.1.0
     ansible.builtin.get_url:
-      url: http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-21.3.1.tar.gz
-      dest: /root/asterisk-21.3.1.tar.gz
+      url: http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-22.1.0.tar.gz
+      dest: /root/asterisk-22.1.0.tar.gz
       mode: '1777'
     when: asterisk_exists.stat.exists == false
 
   - name: Unarchive Asterisk
     ansible.builtin.unarchive:
-      src: /root/asterisk-21.3.1.tar.gz 
+      src: /root/asterisk-22.1.0.tar.gz 
       dest: /root
       remote_src: yes
-      creates: /root/asterisk-21.3.1
+      creates: /root/asterisk-22.1.0
 
   - name: Check if Asterisk has been built exists
     stat:
-      path: /root/asterisk-21.3.1/main/asterisk
+      path: /root/asterisk-22.1.0/main/asterisk
     register: asteriskbuilt_exists
 
   - name: Set use MP3 define
     ansible.builtin.shell: sed -i 's|\(^#define DEVICE_FRAME_SIZE \).*|\164|' addons/chan_mobile.c
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
 
 # Switch repo due to connectivity issues
   - name: Change MP3 repo
     ansible.builtin.shell: sed -i 's|svn export https:\/\/svn\.digium\.com\/svn\/thirdparty\/mp3\/trunk|git clone --depth=1 https:\/\/github\.com\/ajorians\/thirdparty-mp3|' contrib/scripts/get_mp3_source.sh
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
 
   - name: Run Asterisk MP3 script
     ansible.builtin.shell: contrib/scripts/get_mp3_source.sh
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
       creates: addons/mp3
 
   - name: Configure Asterisk
     ansible.builtin.shell: ./configure --with-pjproject-bundled --with-jansson-bundled
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
       creates: makeopts
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: Make Asterisk Menuselect
     ansible.builtin.shell: make menuselect.makeopts
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: MenuSelect Core Sounds 1
     ansible.builtin.shell: menuselect/menuselect --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW menuselect.makeopts
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: MenuSelect Core Sounds 2
     ansible.builtin.shell: menuselect/menuselect --enable CORE-SOUNDS-EN-GSM --enable CORE-SOUNDS-EN-G722 menuselect.makeopts
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: MenuSelect MP3
     ansible.builtin.shell: menuselect/menuselect --enable format_mp3 --enable chan_mobile menuselect.makeopts
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: Make Asterisk
     ansible.builtin.shell: make
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: Check if Asterisk install exists
@@ -148,20 +148,20 @@
   - name: Make Install Asterisk
     ansible.builtin.shell: make install
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
     when: asteriskinstalled_exists.stat.exists == false
 
 # We could not install init scripts for your distribution.
 #  - name: Make Config Asterisk
 #    ansible.builtin.shell: make config
 #    args:
-#      chdir: /root/asterisk-21.3.1
+#      chdir: /root/asterisk-22.1.0
 #    when: asteriskinstalled_exists.stat.exists == false
 
   - name: Make Samples Asterisk
     ansible.builtin.shell: make samples
     args:
-      chdir: /root/asterisk-21.3.1
+      chdir: /root/asterisk-22.1.0
     when: asteriskinstalled_exists.stat.exists == false
 
   - name: Reload Libraries
