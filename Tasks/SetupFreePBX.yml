@@ -1,0 +1,107 @@
+# Run with:
+# ansible-playbook SetupFreePBX.yml
+
+---
+- name: Setup FreePBX
+  hosts: all
+# Created by command: ansible-vault encrypt_string 'SecretHere' --name 'VariableName'
+  vars:
+    FreePBXPass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32393461386161373536643164643630643631306665376364326461386235313734633331373934
+          6263303135353636353464356166373961373861363961370a333533396139636164326432383937
+          36343065343531306166393263383339383865306639356537653934393236623036323362346563
+          3532323939306133320a653865626536663534613431643266326637643630623437653562393135
+          6634
+    TrunkAccount: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          33323437663633313963396135306539386438333931313030396164363631363166653866303262
+          3039383430343932633736373162393433653831373862620a613238383838643138653364356366
+          32396235663232363166383338613663346139663533353939663461303030316336313165616332
+          3062623063663531380a306532636138376138396361616361323366346433643335333165663361
+          3634
+    TrunkNumber: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63303365343433643832636438313130303664316639376664616233323934633565626331333238
+          6231653564383034353639306434303566653063663732630a343064396164623839643931656463
+          30383864656535323339656433366531653634626638626663623337656235313334326631393066
+          3563303739636131360a393466383336333432396630323939663130346230383731333031356564
+          3737
+    TrunkPassword: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          63363331666433623466366437383765333030326565363430396133363337663030666637356263
+          6536393130323561383464633362653138366330383335300a666561313862306363666435393064
+          64613866666364613334663336393335363432643639313362653335666163623035343333323130
+          6635353137623535350a356132656534613033343437323862646439316338333534626432353764
+          6531
+  tasks:
+
+  - name: check if FreePBXSetup exists
+    stat: 
+      path: /home/ajorians/Documents/git/FreePBXSetup
+    register: freepbxsetup_exists
+
+  - name: Checkout from github
+    become: yes
+    become_user: ajorians
+    ansible.builtin.git:
+      repo: https://github.com/ajorians/FreePBXSetup
+      dest: /home/ajorians/Documents/git/FreePBXSetup
+    when: freepbxsetup_exists.stat.exists == false
+
+  - name: Git Reset
+    become: yes
+    become_user: ajorians
+    shell:
+      chdir: /home/ajorians/Documents/git/FreePBXSetup
+      cmd: git reset --hard
+
+  - name: Set Server in Variables File
+    become: yes
+    become_user: ajorians
+    lineinfile:
+      state: present
+      dest: /home/ajorians/Documents/git/FreePBXSetup/variables.ts
+      regexp: 'export const server = "https://asteriskpi.orians.org/";'
+      line: 'export const server = "https://asteriskpi.orians.org/";'
+
+  - name: Set FreePBX Password in Variables File
+    become: yes
+    become_user: ajorians
+    lineinfile:
+      state: present
+      dest: /home/ajorians/Documents/git/FreePBXSetup/variables.ts
+      regexp: 'export const password = "changemeaj";'
+      line: 'export const password = "{{FreePBXPass}}";'
+
+  - name: Insert Extensions to Variables File
+    ansible.builtin.blockinfile:
+      path: /home/ajorians/Documents/git/FreePBXSetup/variables.ts
+      insertafter: "export const deviceextensions = "
+      marker: "// {mark} Extension ANSIBLE MANAGED BLOCK"
+      block: |
+        ["201", "Desktop", "abc"]
+        ["202", "A.J. IPhone", "abc"]
+
+  - name: Insert Ring Groups to Variables File
+    ansible.builtin.blockinfile:
+      path: /home/ajorians/Documents/git/FreePBXSetup/variables.ts
+      insertafter: "export const ringgroups = "
+      marker: "// {mark} RingGroup ANSIBLE MANAGED BLOCK"
+      block: |
+        ["290", "Test Ring Group", ["201", "202"] ]
+
+  - name: Install "Puppeteer" node.js package.
+    become: yes
+    become_user: ajorians
+    community.general.npm:
+      name: puppeteer
+      path: /home/ajorians/Documents/git/FreePBXSetup
+
+  - name: Run
+    become: yes
+    become_user: ajorians
+    shell:
+       chdir: /home/ajorians/Documents/git/FreePBXSetup
+       cmd: npx tsx index.ts
+

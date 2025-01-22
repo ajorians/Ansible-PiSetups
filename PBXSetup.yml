@@ -21,3 +21,4 @@
 - import_playbook: Tasks/InstallFail2Ban.yml
 - import_playbook: Tasks/InstallAsterisk.yml
 - import_playbook: Tasks/InstallFreePBX.yml
+- import_playbook: Tasks/SetupFreePBX.yml
