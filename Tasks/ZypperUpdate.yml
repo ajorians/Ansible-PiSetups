@@ -10,6 +10,10 @@
     zypper:
       name: '*'
       state: latest
+      allow_vendor_change: true
+      force_resolution: true
+      replacefiles: true
+      update_cache: true
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
 
