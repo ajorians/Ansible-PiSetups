@@ -1,0 +1,22 @@
+# Run with:
+# ansible-playbook InstallChromium.yml
+
+---
+- name: Install Chromium
+  hosts: all
+  tasks:
+
+  - name: Install Chromium  package on OpenSUSE/SUSE Linux
+    zypper:
+      name: chromium
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Chromium package on Raspberian Linux
+    apt:
+      name: chromium
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

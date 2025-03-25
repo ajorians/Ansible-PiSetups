@@ -103,5 +103,5 @@
     become_user: ajorians
     shell:
        chdir: /home/ajorians/Documents/git/FreePBXSetup
-       cmd: npx tsx index.ts
+       cmd: npx tsx index.js
 
