@@ -16,6 +16,8 @@
 - import_playbook: Tasks/InstallPLocate.yml
 - import_playbook: Tasks/InstallUnrar.yml
 - import_playbook: Tasks/InstallRSync.yml
+- import_playbook: Tasks/InstallAlpine.yml
+- import_playbook: Tasks/InstallMutt.yml
 
 - import_playbook: Tasks/InstallScreen.yml
 - import_playbook: Tasks/InstallSamba.yml

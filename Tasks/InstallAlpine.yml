@@ -1,0 +1,22 @@
+# Run with:
+# ansible-playbook InstallAlpine.yml
+
+---
+- name: Install Alpine
+  hosts: all
+  tasks:
+
+  - name: Install just Alpine package on OpenSUSE/SUSE Linux
+    zypper:
+      name: alpine
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Alpine package on Raspberian Linux
+    apt:
+      name: alpine
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

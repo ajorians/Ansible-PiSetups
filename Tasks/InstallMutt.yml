@@ -1,0 +1,22 @@
+# Run with:
+# ansible-playbook InstallMutt.yml
+
+---
+- name: Install Mutt
+  hosts: all
+  tasks:
+
+  - name: Install just Mutt package on OpenSUSE/SUSE Linux
+    zypper:
+      name: mutt
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install mutt package on Raspberian Linux
+    apt:
+      name: mutt
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
