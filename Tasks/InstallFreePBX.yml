@@ -43,6 +43,14 @@
       version: release/17.0
     when: freepbx_exists.stat.exists == false
 
+  - name: Get latest FreePBX Source
+    ansible.builtin.git:
+      repo: https://github.com/FreePBX/framework.git
+      dest: /root/freepbx
+      depth: 1
+      version: release/17.0
+      update: true
+
   - name: Adjust script to start as wwwrun user
     ansible.builtin.shell: sed -i 's/-U asterisk -G asterisk/-U wwwrun -G www/' /root/freepbx/start_asterisk
 
@@ -214,15 +222,16 @@
     args:
       chdir: /root/freepbx
 
-  - name: Install Modules 7
-    ansible.builtin.shell: fwconsole ma downloadinstall ucp
-    args:
-      chdir: /root/freepbx
+#Temporary
+#  - name: Install Modules 7
+#    ansible.builtin.shell: fwconsole ma downloadinstall ucp
+#    args:
+#      chdir: /root/freepbx
 
-  - name: Install Modules 8
-    ansible.builtin.shell: fwconsole ma downloadinstall asterisk-cli webrtc sms
-    args:
-      chdir: /root/freepbx
+#  - name: Install Modules 8
+#    ansible.builtin.shell: fwconsole ma downloadinstall asterisk-cli webrtc sms
+#    args:
+#      chdir: /root/freepbx
 
   - name: Change file ownership, group and permissions
     ansible.builtin.file:

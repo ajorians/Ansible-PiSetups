@@ -56,6 +56,14 @@
       chdir: /home/ajorians/Documents/git/FreePBXSetup
       cmd: git reset --hard
 
+  - name: Get latest Source
+    become: yes
+    become_user: ajorians
+    ansible.builtin.git:
+      repo: https://github.com/ajorians/FreePBXSetup
+      dest: /home/ajorians/Documents/git/FreePBXSetup
+      update: true
+
   - name: Set Server in Variables File
     become: yes
     become_user: ajorians
@@ -80,7 +88,7 @@
       insertafter: "export const deviceextensions = "
       marker: "// {mark} Extension ANSIBLE MANAGED BLOCK"
       block: |
-        ["201", "Desktop", "abc"]
+        ["201", "Desktop", "abc"],
         ["202", "A.J. IPhone", "abc"]
 
   - name: Insert Ring Groups to Variables File
