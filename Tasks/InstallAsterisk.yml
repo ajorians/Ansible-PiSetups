@@ -119,10 +119,10 @@
     when: asteriskbuilt_exists.stat.exists == false
 
   - name: MenuSelect IAX2
-     ansible.builtin.shell: menuselect/menuselect --enable chan_iax2 menuselect.makeopts
-     args:
-       chdir: /root/{{asterisk_version}}
-     when: asteriskbuilt_exists.stat.exists == false
+    ansible.builtin.shell: menuselect/menuselect --enable chan_iax2 menuselect.makeopts
+    args:
+      chdir: /root/{{asterisk_version}}
+    when: asteriskbuilt_exists.stat.exists == false
 
   - name: MenuSelect Core Sounds 1
     ansible.builtin.shell: menuselect/menuselect --enable CORE-SOUNDS-EN-WAV --enable CORE-SOUNDS-EN-ULAW menuselect.makeopts
