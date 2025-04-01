@@ -18,12 +18,21 @@
       option: enabled
       value: true
 
-  - name: Set log for Asterisk
+  - name: Add log paths for Asterisk
     community.general.ini_file:
       path: /etc/fail2ban/jail.conf
       section: asterisk
       option: logpath
-      value: /var/log/asterisk/messages.log
+      value: ReplaceMeBlock
+
+  - name: Set actual log paths
+    lineinfile:
+      dest: /etc/fail2ban/jail.conf
+      regexp: 'logpath = ReplaceMeBlock'
+      line: |
+        logpath = /var/log/asterisk/full
+           /var/log/asterisk/messages.log
+           /var/log/asterisk/messages
 
   - name: Enable rule for SSH
     community.general.ini_file:
