@@ -37,7 +37,7 @@
   - name: Enable rule for SSH
     community.general.ini_file:
       path: /etc/fail2ban/jail.conf
-      section: sshd
+      section: ssh
       option: enabled 
       value: true
 
