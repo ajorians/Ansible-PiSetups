@@ -18,21 +18,24 @@
       option: enabled
       value: true
 
-  - name: Add log paths for Asterisk
+  - name: Add one log path for Asterisk
     community.general.ini_file:
       path: /etc/fail2ban/jail.conf
       section: asterisk
       option: logpath
-      value: ReplaceMeBlock
+      value: /var/log/asterisk/full
 
-  - name: Set actual log paths
-    lineinfile:
-      dest: /etc/fail2ban/jail.conf
-      regexp: 'logpath = ReplaceMeBlock'
-      line: |
-        logpath = /var/log/asterisk/full
-           /var/log/asterisk/messages.log
-           /var/log/asterisk/messages
+  - name: Add /var/log/asterisk/messages.log after a specific line
+    ansible.builtin.lineinfile:
+      path: /etc/fail2ban/jail.conf
+      line: "          /var/log/asterisk/messages.log"
+      insertafter: '/var/log/asterisk/full'
+
+  - name: Add /var/log/asterisk/messages after a specific line
+    ansible.builtin.lineinfile:
+      path: /etc/fail2ban/jail.conf
+      line: "          /var/log/asterisk/messages"
+      insertafter: '/var/log/asterisk/messages.log'
 
   - name: Enable rule for SSH
     community.general.ini_file:
