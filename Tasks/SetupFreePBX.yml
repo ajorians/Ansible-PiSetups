@@ -34,6 +34,7 @@
           64613866666364613334663336393335363432643639313362653335666163623035343333323130
           6635353137623535350a356132656534613033343437323862646439316338333534626432353764
           6531
+    ExtensionPassword: "mypass"
   tasks:
 
   - name: check if FreePBXSetup exists
@@ -88,8 +89,12 @@
       insertafter: "export const deviceextensions = "
       marker: "// {mark} Extension ANSIBLE MANAGED BLOCK"
       block: |
-        ["201", "Desktop", "abc"],
-        ["202", "A.J. IPhone", "abc"]
+        ["201", "Desktop", "{{ExtensionPassword}}"],
+        ["202", "A.J. IPhone", "{{ExtensionPassword}}"],
+        ["203", "Phone1", "{{ExtensionPassword}}"],
+        ["204", "Phone2", "{{ExtensionPassword}}"],
+        ["205", "Phone3", "{{ExtensionPassword}}"],
+        ["206", "Phone4", "{{ExtensionPassword}}"]
 
   - name: Insert Ring Groups to Variables File
     ansible.builtin.blockinfile:
