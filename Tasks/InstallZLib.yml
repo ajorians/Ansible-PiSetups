@@ -6,8 +6,8 @@
   hosts: development
   tasks:
 
-  - name: Install ZLib package on OpenSUSE/SUSE Linux
+  - name: Install ZLib devel package on OpenSUSE/SUSE Linux
     zypper:
-      name: zlib-devel
+      name: zlib-ng-devel #ng is Next Generation
       state: present
 

@@ -4,7 +4,7 @@
 ---
 - import_playbook: BasicSetupSteps.yml
 
-- import_playbook: Docker/ResilioSync/SetupResilioSync.yml
+- import_playbook: ExternalHD/FStabHD.yml
+- import_playbook: Docker/ResilioSync/development/SetupResilioSync.yml
 - import_playbook: InstallNDLessSDK.yml
-
 

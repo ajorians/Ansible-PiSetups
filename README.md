@@ -18,6 +18,7 @@ ansible-playbook -i inventory.ini BasicSetupSteps.yml --ask-vault-pass --limit '
 ## Machines
 ansible-playbook -i inventory.ini BackupSetup.yml --limit 'backups' --ask-vault-pass
 ansible-playbook -i inventory.ini CMSSetup.yml --limit 'cms' --ask-vault-pass
+ansible-playbook -i inventory.ini DevelopmentSetup.yml --limit 'development' --ask-vault-pass
 ansible-playbook -i inventory.ini DownloadSetup.yml --limit 'download' --ask-vault-pass
 ansible-playbook -i inventory.ini PBXSetup.yml --limit 'pbx' --ask-vault-pass
 ansible-playbook -i inventory.ini VPNSetup.yml --limit 'vpn' --ask-vault-pass

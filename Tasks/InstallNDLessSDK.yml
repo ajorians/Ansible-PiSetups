@@ -19,6 +19,14 @@
       dest: /home/ajorians/Documents/git/Ndless
     when: ndless_exists.stat.exists == false
 
+  - name: Get latest NDLess Source
+    become: yes
+    become_user: ajorians
+    ansible.builtin.git:
+      repo: https://github.com/ndless-nspire/Ndless.git
+      dest: /home/ajorians/Documents/git/Ndless
+      update: true
+
   - name: Check if nspire-gcc exists
     stat:
       path: /home/ajorians/Documents/git/Ndless/ndless-sdk/bin/nspire-gcc
