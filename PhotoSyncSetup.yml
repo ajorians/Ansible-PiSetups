@@ -1,0 +1,10 @@
+# Run with:
+# ansible-playbook -i inventory.ini PhotoSyncSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
+- import_playbook: ExternalHD/FStabHD.yml
+- import_playbook: Docker/ResilioSync/photosync/SetupResilioSync.yml
+
+
