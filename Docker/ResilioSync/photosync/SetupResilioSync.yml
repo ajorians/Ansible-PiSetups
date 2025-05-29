@@ -51,7 +51,7 @@
         <VirtualHost *:80>
           ServerName {{resilio_sync_url}}
           ProxyPass / http://127.0.0.1:8888/
-          ProxyPassReverse / http://127.0.0.8888/
+          ProxyPassReverse / http://127.0.0.1:8888/
         </VirtualHost>
     notify:
     - Restart Apache2 service
