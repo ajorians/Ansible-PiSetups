@@ -1,0 +1,52 @@
+# Run with
+# ansible-playbook SetupErsatztv.yml
+# https://ersatztv.org/
+
+---
+- name: Setup Ersatztv
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/ersatztv
+      - /opt/DockerSwarmData/ersatztv/tv
+      - /opt/DockerSwarmData/ersatztv/movies
+      - /opt/DockerSwarmData/ersatztv/config
+      - /root/docker
+      - /root/docker/ersatztv
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/ersatztv
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Ersatztv from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/ersatztv
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/ersatztv.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName iptv.orians.org
+          ServerAlias iptv.stage.orians.org iptv
+          ProxyPass / http://127.0.0.1:8409/
+          ProxyPassReverse / http://127.0.0.1:8409/
+        </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
