@@ -1,0 +1,7 @@
+# Run with:
+# ansible-playbook -i inventory.ini JellyfinSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
+- import_playbook: Docker/Jellyfin/SetupJellyfin.yml
