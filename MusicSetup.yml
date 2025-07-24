@@ -1,0 +1,6 @@
+# Run with:
+# ansible-playbook -i inventory.ini MusicSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
