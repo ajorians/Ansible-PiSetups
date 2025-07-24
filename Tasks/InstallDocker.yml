@@ -34,6 +34,21 @@
     when:
     - ansible_facts['distribution'].find("openSUSE") == -1
 
+  - name: Create directory for Docker CLI plugins
+    ansible.builtin.file:
+      path: /usr/libexec/docker/cli-plugins
+      state: directory
+      mode: '0755'
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Download Docker Compose plugin (v2) for ARM
+    ansible.builtin.get_url:
+      url: https://github.com/docker/compose/releases/download/v2.39.0/docker-compose-linux-aarch64
+      dest: /usr/libexec/docker/cli-plugins/docker-compose
+      mode: '0755'
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
 #  - name: Install docker-compose Python package on OpenSUSE/SUSE Linux
 #    zypper:

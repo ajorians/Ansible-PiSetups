@@ -1,0 +1,67 @@
+# Run with
+# ansible-playbook SetupNavidrome.yml
+# https://www.navidrome.org/
+
+---
+- name: Setup Navidrome
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/navidrome
+      - /opt/DockerSwarmData/navidrome/data
+      - /opt/DockerSwarmData/navidrome/music
+      - /root/docker
+      - /root/docker/navidrome
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/navidrome
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Navidrome from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/navidrome
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/navidrome.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName navidrome.orians.org
+          ServerAlias navidrome.stage.orians.org navidrome
+          ProxyPass / http://127.0.0.1:4533/
+          ProxyPassReverse / http://127.0.0.1:4533/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/navidrome.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName navidrome.orians.org
+          ServerAlias navidrome.stage.orians.org navidrome
+          ProxyPass / http://127.0.0.1:4533/
+          ProxyPassReverse / http://127.0.0.1:4533/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
