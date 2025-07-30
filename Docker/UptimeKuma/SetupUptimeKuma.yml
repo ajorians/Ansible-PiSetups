@@ -1,0 +1,65 @@
+# Run with
+# ansible-playbook SetupUptimeKuma.yml
+# https://uptime.kuma.pet
+
+---
+- name: Setup Uptime Kuma
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/uptime-kuma
+      - /root/docker
+      - /root/docker/uptime-kuma
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/uptime-kuma
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Uptime-Kuma from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/uptime-kuma
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/uptime-kuma.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName uptime.orians.org
+          ServerAlias uptime.stage.orians.org uptime
+          ProxyPass / http://127.0.0.1:3001/
+          ProxyPassReverse / http://127.0.0.1:3001/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/uptime-kuma.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName uptime.orians.org
+          ServerAlias uptime.stage.orians.org uptime
+          ProxyPass / http://127.0.0.1:3001/
+          ProxyPassReverse / http://127.0.0.1:3001/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
