@@ -13,5 +13,5 @@ services:
       - /mnt/download_files:/data
       - /opt/DockerSwarmData/rtorrent:/socket # so /socket/rpc.socket
     ports:
-      - 3001:3001
+      - 3001:3001 # <Host Port>:<Container Port>
 

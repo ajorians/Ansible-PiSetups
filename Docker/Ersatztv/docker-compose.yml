@@ -8,7 +8,7 @@ services:
             - '/opt/DockerSwarmData/ersatztv/movies:/movies:ro'
             - '/opt/DockerSwarmData/ersatztv/config:/root/.local/share/ersatztv'
         ports:
-            - '8409:8409'
+            - '8409:8409' # <Host Port>:<Container Port>
         environment:
             - TZ=America/Washington
         container_name: ersatztv

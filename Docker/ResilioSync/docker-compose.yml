@@ -9,8 +9,8 @@ services:
     volumes:
       - /opt/DockerSwarmData/resiliosync/config:/config
       - /opt/DockerSwarmData/resiliosync/downloads:/downloads
-      - /mnt/backups:/sync
+      - /mnt/sync:/sync
     ports:
-      - 9200:8888
-      - 9201:55555
+      - 8888:8888 # <Host Port>:<Container Port>
+      - 55555:55555
     restart: unless-stopped

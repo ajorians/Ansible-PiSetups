@@ -18,7 +18,7 @@ services:
       - /mnt/allwrite/new:/data/new
       - /mnt/allwrite/brittany:/data/brittany
     ports:
-      - 8096:8096
+      - 8096:8096 # <Host Port>:<Container Port>
       - 8920:8920 #optional
       - 7359:7359/udp #optional
       - 1900:1900/udp #optional

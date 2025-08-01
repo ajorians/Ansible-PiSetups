@@ -20,7 +20,7 @@
       - /mnt/DockerSwarmData/resiliosync/downloads
       - /root/docker
       - /root/docker/resiliosync
-      - /mnt/backups
+      - /mnt/sync
 
   - name: Copy the docker-compose file with owner and permissions
     ansible.builtin.copy:
@@ -34,6 +34,14 @@
     community.docker.docker_compose_v2:
       project_src: /root/docker/resiliosync
 
+  - name: Print Message on mount points
+    ansible.builtin.debug:
+      msg: "Sync things are /Sync"
+
+  - name: Print Message on port exposed
+    ansible.builtin.debug:
+      msg: "Container's web runs on port 8888"
+
   - name: Make Apache VHost file
     ansible.builtin.copy:
       dest: /etc/apache2/vhosts.d/resiliosync.conf
@@ -41,12 +49,15 @@
       content: |
         <VirtualHost *:80>
           ServerName {{resilio_sync_url}}
-          ProxyPass / http://127.0.0.1:9200/
-          ProxyPassReverse / http://127.0.0.9200/
+          ProxyPass / http://127.0.0.1:8888/
+          ProxyPassReverse / http://127.0.0.8888/
         </VirtualHost>
+    notify:
+    - Restart Apache2 service
 
-  - name: Restart Apache2 service
-    ansible.builtin.systemd:
-      state: restarted
-      name: apache2
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
 

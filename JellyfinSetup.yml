@@ -4,5 +4,6 @@
 ---
 - import_playbook: BasicSetupSteps.yml
 
+- import_playbook: Docker/ResilioSync/SetupResilioSync.yml
 - import_playbook: Docker/Jellyfin/SetupJellyfin.yml
 - import_playbook: Docker/Ersatztv/SetupErsatztv.yml
