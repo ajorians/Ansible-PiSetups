@@ -7,3 +7,5 @@
 - import_playbook: Docker/ResilioSync/SetupResilioSync.yml
 - import_playbook: Docker/Jellyfin/SetupJellyfin.yml
 - import_playbook: Docker/Ersatztv/SetupErsatztv.yml
+
+- import_playbook: Tasks/InstallRTorrent.yml
