@@ -1,0 +1,68 @@
+# Run with
+# ansible-playbook SetupCompiler-Explorer.yml
+# https://godbolt.org/
+
+---
+- name: Setup Compiler-Explorer
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/compiler-explorer
+      - /root/docker
+      - /root/docker/compiler-exlorer
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/compiler-explorer
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Compiler-Explorer from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/compiler-explorer
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/compiler-explorer.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName compiler-explorer.orians.org
+          ServerAlias compilerexplorer.orians.org gcc.orians.org clang.orians.org compile.orians.org
+          ProxyPass / http://127.0.0.1:10240/
+          ProxyPassReverse / http://127.0.0.1:10240/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/compiler-explorer.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName compiler-explorer.orians.org
+          ServerAlias compilerexplorer.orians.org gcc.orians.org clang.orians.org compile.orians.org
+          ProxyPass / http://127.0.0.1:10240/
+          ProxyPassReverse / http://127.0.0.1:10240/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
