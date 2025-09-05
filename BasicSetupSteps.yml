@@ -5,7 +5,7 @@
 - import_playbook: Tasks/SetTimeZone.yml
 - import_playbook: Tasks/CreateAJOriansUser.yml
 - import_playbook: Tasks/InstallCron.yml
-- import_playbook: Tasks/ZypperUpdate.yml
+#- import_playbook: Tasks/ZypperUpdate.yml
 - import_playbook: Tasks/InstallAnsible.yml
 - import_playbook: Tasks/InstallDocker.yml
 #- import_playbook: Tasks/SetupDockerHub.yml

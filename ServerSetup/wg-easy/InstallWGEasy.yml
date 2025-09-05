@@ -32,3 +32,38 @@
     community.docker.docker_compose_v2:
       project_src: /root/docker/wg-easy
 
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/vpn.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName vpn.orians.org
+          ServerAlias pivpn.orians.org
+          ProxyPass / http://127.0.0.1:51821/
+          ProxyPassReverse / http://127.0.0.1:51821/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/vpn.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName vpn.orians.org
+          ServerAlias pivpn.orians.org
+          ProxyPass / http://127.0.0.1:51821/
+          ProxyPassReverse / http://127.0.0.1:51821/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2

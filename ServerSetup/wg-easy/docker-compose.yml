@@ -10,7 +10,8 @@ services:
       - WG_HOST=vpn.orians.org
 
       # Optional:
-      - PASSWORD=changemeaj
+##docker run ghcr.io/wg-easy/wg-easy:14 node -e 'const bcrypt = require("bcryptjs"); const hash = bcrypt.hashSync("changemeaj", 10); console.log(hash.replace(/\$/g, "$$$$"));'
+      - PASSWORD_HASH=$$2a$$10$$foWInmIZQ9xLRJUULPbQV.yygTxoQoClCh9Np2cMhIe8ItfBV4dxu
       # - WG_PORT=51820
       # - WG_DEFAULT_ADDRESS=10.8.0.x
       - WG_DEFAULT_DNS=8.8.8.8, 8.8.4.4
