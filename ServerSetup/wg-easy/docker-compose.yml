@@ -27,6 +27,7 @@ services:
     container_name: wg-easy
     volumes:
       - /opt/DockerSwarmData/wireguard:/etc/wireguard
+    # <Host Port>:<Container Port>
     ports:
       - "51820:51820/udp"
       - "51821:51821/tcp"

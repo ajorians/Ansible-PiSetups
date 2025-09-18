@@ -3,7 +3,7 @@ services:
   proxy:
     image: ubuntu/squid
     ports:
-      - "3128:3128"
+      - "3128:3128" # <Host Port>:<Container Port>
     environment:
       - TZ=America/Detroit
     volumes:

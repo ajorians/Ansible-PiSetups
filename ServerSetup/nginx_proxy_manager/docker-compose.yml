@@ -3,6 +3,7 @@ services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
+    # <Host Port>:<Container Port>
     ports:
       - '80:80'
       - '81:81'
