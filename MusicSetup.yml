@@ -4,5 +4,6 @@
 ---
 - import_playbook: BasicSetupSteps.yml
 - import_playbook: Docker/Navidrome/SetupNavidrome.yml
+- import_playbook: Docker/Koel/SetupKoel.yml
 - import_playbook: Docker/UptimeKuma/SetupUptimeKuma.yml
 

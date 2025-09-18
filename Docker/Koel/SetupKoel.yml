@@ -1,0 +1,104 @@
+# Run with
+# ansible-playbook SetupKoel.yml
+# https://koel.dev/
+
+---
+- name: Setup Koel
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/koel/
+      - /opt/DockerSwarmData/koel/music
+      - /opt/DockerSwarmData/koel/covers
+      - /opt/DockerSwarmData/koel/search_index
+      - /opt/DockerSwarmData/koel/sql
+      - /root/docker
+      - /root/docker/koel
+
+  - name: Create Database
+    community.mysql.mysql_db:
+      login_user: root
+      name:
+        - koel
+      state: present
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: koeluser
+      host: '%'
+      password: koelpassword 
+      priv:
+        'koel.*': 'ALL,GRANT'
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/koel
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Koel from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/koel
+
+  - name: Print how to get Koel running
+    ansible.builtin.debug:
+      msg: |
+        If you go to to port you'll get a 500 server error here is how to fix that.
+        First verify the Database is working via:
+        mysql -h 10.0.0.10 -u koeluser -pkoelpassword --skip-ssl
+        Next connect to Bash in the container via:
+        docker exec --user www-data -it <container_name_for_koel> bash
+        and then run:
+        php artisan koel:init --no-assets
+        Then Koel will work.  The default username and password is:
+        admin@koel.dev and KoelIsCool"
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/koel.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName koel.orians.org
+          ServerAlias koel.stage.orians.org koel
+          ProxyPass / http://127.0.0.1:5000/
+          ProxyPassReverse / http://127.0.0.1:5000/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/koel.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName koel.orians.org
+          ServerAlias koel.stage.orians.org koel
+          ProxyPass / http://127.0.0.1:5000/
+          ProxyPassReverse / http://127.0.0.1:5000/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2

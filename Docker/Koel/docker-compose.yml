@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  koel:
+    image: phanan/koel
+    container_name: koel
+    restart: unless-stopped
+    ports:
+      - "5000:80"  # <Host Port>:<Container Port>
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: 10.0.0.10 
+      DB_PORT: 3306
+      DB_DATABASE: koel
+      DB_USERNAME: koeluser
+      DB_PASSWORD: koelpassword
+    volumes:
+      - /opt/DockerSwarmData/koel/music:/music
+      - /opt/DockerSwarmData/koel/covers:/var/www/html/public/img/covers
+      - /opt/DockerSwarmData/koel/search_index:/var/www/html/storage/search-indexes
+      - /opt/DockerSwarmData/koel/sql:/docker-entrypoint-initdb.d
