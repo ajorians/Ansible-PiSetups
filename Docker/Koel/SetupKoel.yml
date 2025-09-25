@@ -60,6 +60,7 @@
         mysql -h 10.0.0.10 -u koeluser -pkoelpassword --skip-ssl
         Next connect to Bash in the container via:
         docker exec --user www-data -it <container_name_for_koel> bash
+        vi .env.example and I set APP_URL and FORCE_HTTPS=true
         and then run:
         php artisan koel:init --no-assets
         Then Koel will work.  The default username and password is:
