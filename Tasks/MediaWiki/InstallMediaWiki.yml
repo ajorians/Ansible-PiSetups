@@ -73,7 +73,7 @@
       content: |
          <VirtualHost *:80>
            ServerAdmin webmaster@localhost
-           DocumentRoot /srv/www/htdocs/mediawiki.1-39.3
+           DocumentRoot /srv/www/htdocs/mediawiki-1.39.3
            ServerName wiki.orians.org
            ServerAlias wiki mediawiki.orians.org mediawiki wiki.local newwiki.local
            <Directory /srv/www/htdocs/mediawiki-1.39.3>
@@ -81,9 +81,12 @@
               AllowOverride All
            </Directory>
          </VirtualHost>
+    notify:
+    - Restart Apache2 service
 
-  - name: Restart Apache2 service
-    ansible.builtin.systemd:
-      state: restarted
-      name: apache2
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
 
