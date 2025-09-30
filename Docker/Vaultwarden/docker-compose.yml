@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+      - "8000:80"  # <Host Port>:<Container Port>
+    environment:
+      DOMAIN: "https://vaultwarden.orians.org"
+    volumes:
+      - /opt/DockerSwarmData/vaultwarden:/data

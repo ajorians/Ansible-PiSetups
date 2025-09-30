@@ -1,0 +1,92 @@
+# Run with
+# ansible-playbook SetupVaultwarden.yml
+# https://github.com/dani-garcia/vaultwarden
+
+---
+- name: Setup Vaultwarden
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/vaultwarden/
+      - /root/docker
+      - /root/docker/vaultwarden
+
+  - name: Create Database
+    community.mysql.mysql_db:
+      login_user: root
+      name:
+        - vaultwarden
+      state: present
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: vaultwardenuser
+      host: '%'
+      password: vaultwardenpassword 
+      priv:
+        'vaultwarden.*': 'ALL,GRANT'
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/vaultwarden
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Vaultwarden from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/vaultwarden
+
+  - name: Print some information
+    ansible.builtin.debug:
+      msg: |
+        Nothing at this time
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/vaultwarden.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName vaultwarden.orians.org
+          ServerAlias vaultwarden.stage.orians.org vaultwarden
+          ProxyPass / http://127.0.0.1:8000/
+          ProxyPassReverse / http://127.0.0.1:8000/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/vaultwarden.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName vaultwarden.orians.org
+          ServerAlias vaultwarden.stage.orians.org vaultwarden
+          ProxyPass / http://127.0.0.1:8000/
+          ProxyPassReverse / http://127.0.0.1:8000/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
