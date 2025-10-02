@@ -4,35 +4,37 @@
 ---
 - name: Install MediaWiki
   hosts: all
+  vars:
+    mediawiki_version: "1.44.0"
   tasks:
 
   - name: check if mediawiki exists
     stat: 
-      path: /srv/www/htdocs/mediawiki-1.39.3
+      path: /srv/www/htdocs/mediawiki-{{mediawiki_version}}
     register: mediawiki_exists
 
   - name: Download MediaWiki
     ansible.builtin.get_url:
-      url: https://releases.wikimedia.org/mediawiki/1.39/mediawiki-1.39.3.zip
-      dest: /srv/www/htdocs/mediawiki-1.39.3.zip
+      url: https://releases.wikimedia.org/mediawiki/1.44/mediawiki-{{mediawiki_version}}.zip
+      dest: /srv/www/htdocs/mediawiki-{{mediawiki_version}}.zip
     when: mediawiki_exists.stat.exists == false
 
   - name: Extract MediaWiki
     ansible.builtin.unarchive:
-      src: /srv/www/htdocs/mediawiki-1.39.3.zip
+      src: /srv/www/htdocs/mediawiki-{{mediawiki_version}}.zip
       dest: /srv/www/htdocs
       remote_src: yes
     when: mediawiki_exists.stat.exists == false
 
   - name: Change permissions for MediaWiki
     ansible.builtin.file:
-      path: /srv/www/htdocs/mediawiki-1.39.3
+      path: /srv/www/htdocs/mediawiki-{{mediawiki_version}}.zip
       owner: wwwrun
       group: www
 
   - name: check if rating extension exists
     stat:
-      path: /srv/www/htdocs/mediawiki-1.39.3/extensions/SemanticRating
+      path: /srv/www/htdocs/mediawiki-{{mediawiki_version}}/extensions/SemanticRating
     register: semanticrating_exists
 
   - name: Create Database
@@ -52,20 +54,6 @@
       priv:
         'mediawiki.*': 'ALL,GRANT'
 
-#  - name: Change permissions for files directory
-#    ansible.builtin.file:
-#      path: /srv/www/htdocs/backdrop/files
-#      owner: wwwrun
-#      group: www
-#      mode: '0755'
-
-#  - name: Change permissions for settings file
-#    ansible.builtin.file:
-#      path: /srv/www/htdocs/backdrop/settings.php
-#      owner: wwwrun
-#      group: www
-#      mode: '0755'
-
   - name: Make Apache VHost file
     ansible.builtin.copy:
       dest: /etc/apache2/vhosts.d/mediawiki.conf
@@ -73,10 +61,10 @@
       content: |
          <VirtualHost *:80>
            ServerAdmin webmaster@localhost
-           DocumentRoot /srv/www/htdocs/mediawiki-1.39.3
+           DocumentRoot /srv/www/htdocs/mediawiki-{{mediawiki_version}}
            ServerName wiki.orians.org
            ServerAlias wiki mediawiki.orians.org mediawiki wiki.local newwiki.local
-           <Directory /srv/www/htdocs/mediawiki-1.39.3>
+           <Directory /srv/www/htdocs/mediawiki-{{mediawiki_version}}>
               Options All
               AllowOverride All
            </Directory>
