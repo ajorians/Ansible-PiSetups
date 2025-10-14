@@ -51,6 +51,26 @@
           ProxyPass / http://127.0.0.1:9000/
           ProxyPassReverse / http://127.0.0.1:9000/
         </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/jellyfin.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName jellyfinlocal.orians.org
+          ServerAlias jellyfin.stage.orians.org jellyfin
+          ProxyPass / http://127.0.0.1:9000/
+          ProxyPassReverse / http://127.0.0.1:9000/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
 
   - name: Restart Apache2 service
     ansible.builtin.systemd:
