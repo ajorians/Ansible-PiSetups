@@ -15,7 +15,7 @@
 
   - name: Install docker package on Raspberian Linux
     apt:
-      name: docker
+      name: docker.io
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") == -1
