@@ -50,8 +50,25 @@
         <VirtualHost *:80>
           ServerName {{resilio_sync_url}}
           ProxyPass / http://127.0.0.1:8888/
-          ProxyPassReverse / http://127.0.0.8888/
+          ProxyPassReverse / http://127.0.0.1:8888/
         </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/resiliosync.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName {{resilio_sync_url}}
+          ProxyPass / http://127.0.0.1:88888/
+          ProxyPassReverse / http://127.0.0.1:8888/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
     notify:
     - Restart Apache2 service
 
