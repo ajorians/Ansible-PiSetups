@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  mediawiki:
+    image: mediawiki:latest
+    container_name: mediawiki
+    ports:
+      - "9000:80" # <Host Port>:<Container Port>
+    environment:
+      MEDIAWIKI_DB_HOST: 10.0.0.14
+      MEDIAWIKI_DB_USER: wikiuser
+      MEDIAWIKI_DB_PASSWORD: wikipassword
+      MEDIAWIKI_DB_NAME: mediawiki
+    volumes:
+      - /opt/DockerSwarmData/mediawiki/images:/var/www/html/images
+      - /opt/DockerSwarmData/mediawiki/LocalSettings.php:/var/www/html/LocalSettings.php
+    restart: unless-stopped

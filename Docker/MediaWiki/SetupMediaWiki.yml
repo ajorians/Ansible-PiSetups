@@ -1,0 +1,67 @@
+# Run with
+# ansible-playbook SetupMediaWiki.yml
+# https://www.mediawiki.org/wiki/MediaWiki
+
+---
+- name: Setup MediaWiki
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/mediawiki
+      - /opt/DockerSwarmData/mediawiki/images
+      - /root/docker
+      - /root/docker/mediawiki
+
+  - name: Create Database
+    community.mysql.mysql_db:
+      login_user: root
+      name:
+        - mediawiki
+      state: present
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: wikiuser
+      host: '%'
+      password: wikipassword 
+      priv:
+        'mediawiki.*': 'ALL,GRANT'
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/mediawiki
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy MediaWiki from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/mediawiki
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/mediawiki.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName wiki.orians.org
+          ServerAlias wikibackup.orians.org
+          ProxyPass / http://127.0.0.1:9000/
+          ProxyPassReverse / http://127.0.0.1:9000/
+        </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
