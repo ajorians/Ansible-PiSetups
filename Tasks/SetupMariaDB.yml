@@ -54,6 +54,14 @@
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
 
+    replace:
+      path: /etc/mysql/mariadb.conf.d/50-server.cnf
+      regexp: '^bind-address\s+=\s+127.0.0.1'
+      replace: '#bind-address = 127.0.0.1'
+      backup: yes
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
   - name: Enable Maria service
     ansible.builtin.systemd:
       name: mysql
