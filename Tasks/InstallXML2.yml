@@ -8,7 +8,7 @@
 
   - name: Install LibXML2 package on OpenSUSE/SUSE Linux
     zypper:
-      name: libxml2-2
+      name: libxml2-*
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1

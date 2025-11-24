@@ -43,6 +43,11 @@
       version: release/17.0
     when: freepbx_exists.stat.exists == false
 
+  - name: Git Reset
+    shell:
+      chdir: /root/freepbx
+      cmd: git reset --hard
+
   - name: Get latest FreePBX Source
     ansible.builtin.git:
       repo: https://github.com/FreePBX/framework.git
@@ -78,10 +83,10 @@
       path: /var/log/asterisk/
       mode: '0775'
 
-  - name: Add Group write permissions to /var/run/asterisk
-    ansible.builtin.file:
-      path: /var/run/asterisk/
-      mode: '0775'
+#  - name: Add Group write permissions to /var/run/asterisk
+#    ansible.builtin.file:
+#      path: /var/run/asterisk/
+#      mode: '0775'
 
   - name: Add Group write permissions to /etc/asterisk
     ansible.builtin.file:
@@ -121,7 +126,7 @@
       state: absent
     when: freepbxwww_exists.stat.exists == false
 
-  - name: Remove /etc/freepbx.conf
+  - name: Remove /etc/amportal.conf
     ansible.builtin.file:
       path: /etc/amportal.conf
       state: absent

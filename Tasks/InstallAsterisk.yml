@@ -5,7 +5,7 @@
 - name: Install Asterisk
   hosts: all
   vars:
-     asterisk_version: "asterisk-22.3.0"
+     asterisk_version: "asterisk-23.1.0"
   tasks:
 
 #Install some prerequesits
@@ -94,10 +94,10 @@
       chdir: /root/{{asterisk_version}}
 
 # Switch repo due to connectivity issues
-  - name: Change MP3 repo
-    ansible.builtin.shell: sed -i 's|svn export https:\/\/svn\.digium\.com\/svn\/thirdparty\/mp3\/trunk|git clone --depth=1 https:\/\/github\.com\/ajorians\/thirdparty-mp3|' contrib/scripts/get_mp3_source.sh
-    args:
-      chdir: /root/{{asterisk_version}}
+#  - name: Change MP3 repo
+#    ansible.builtin.shell: sed -i 's|svn export https:\/\/svn\.digium\.com\/svn\/thirdparty\/mp3\/trunk|git clone --depth=1 https:\/\/github\.com\/ajorians\/thirdparty-mp3|' contrib/scripts/get_mp3_source.sh
+#    args:
+#      chdir: /root/{{asterisk_version}}
 
   - name: Run Asterisk MP3 script
     ansible.builtin.shell: contrib/scripts/get_mp3_source.sh
