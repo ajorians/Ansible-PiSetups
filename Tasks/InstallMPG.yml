@@ -10,4 +10,12 @@
     zypper:
       name: mpg123
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
+  - name: Install MPG123 package on Raspberian Linux
+    apt:
+      name: mpg123
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1

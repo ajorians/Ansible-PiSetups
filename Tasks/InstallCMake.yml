@@ -10,13 +10,26 @@
     zypper:
       name: cmake
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install CMake package on Raspberian Linux
+    apt:
+      name: cmake
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install cmake-full package on OpenSUSE/SUSE Linux
     zypper:
       name: cmake-full
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install cmake-man package on OpenSUSE/SUSE Linux
     zypper:
       name: cmake-man
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1

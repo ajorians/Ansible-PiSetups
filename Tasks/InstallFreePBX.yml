@@ -19,16 +19,43 @@
     zypper:
       name: icu
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install icu-devel package on OpenSUSE/SUSE Linux
     zypper:
       name: libicu-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install icu-dev package on Raspberian Linux
+    apt:
+      name: libicu-dev
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install sox package on OpenSUSE/SUSE Linux
     zypper:
       name: sox
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install sox package on Raspberian Linux
+    apt:
+      name: sox
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Install pymysql package on Raspberian Linux
+    apt:
+      name: python3-pymysql
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Check if FreePBX source exists
     stat:
@@ -159,6 +186,8 @@
         Description = ODBC for MySQL (MariaDB)
         Driver = /usr/lib64/libmaodbc.so
         FileUsage = 1
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Make ODBC INI File
     ansible.builtin.blockinfile:
@@ -173,6 +202,8 @@
         Socket=/var/run/mysql/mysql.sock
         option=3
         Charset=utf8
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Run Install Script
     ansible.builtin.shell: ./install --dbpass={{databasepasswd}} --webroot=/srv/www/htdocs/freepbx --user=wwwrun --group=www -n

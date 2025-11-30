@@ -10,6 +10,15 @@
     zypper:
       name: fail2ban
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Fail2Ban package on Raspberian Linux
+    apt:
+      name: fail2ban
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Enable rule for Asterisk
     community.general.ini_file:

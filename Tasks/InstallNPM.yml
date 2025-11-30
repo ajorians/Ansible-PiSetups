@@ -10,3 +10,13 @@
     zypper:
       name: npm22
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install NPM package on Raspberian Linux
+    apt:
+      name: npm
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

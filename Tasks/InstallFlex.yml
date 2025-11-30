@@ -10,3 +10,13 @@
     zypper:
       name: flex
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Flex package on Raspberian Linux
+    apt:
+      name: flex
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

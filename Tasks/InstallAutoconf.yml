@@ -10,3 +10,13 @@
     zypper:
       name: autoconf
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Autoconf package on Raspberian Linux
+    apt:
+      name: autoconf
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

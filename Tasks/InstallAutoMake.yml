@@ -10,3 +10,13 @@
     zypper:
       name: automake
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Automake package on Raspberian Linux
+    apt:
+      name: automake
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

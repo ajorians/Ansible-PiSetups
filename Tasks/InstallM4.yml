@@ -10,3 +10,13 @@
     zypper:
       name: m4
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install M4 package on Raspberian Linux
+    apt:
+      name: m4
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+

@@ -10,8 +10,20 @@
     zypper:
       name: nodejs22
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install NodeJS package on Raspberian Linux
+    apt:
+      name: nodejs
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install NodeJS-Common package on OpenSUSE/SUSE Linux
     zypper:
       name: nodejs-common
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+

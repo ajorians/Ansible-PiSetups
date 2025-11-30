@@ -13,56 +13,176 @@
     zypper:
       name: mpg123
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install MPG123 package on Raspberian Linux
+    apt:
+      name: mpg123
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install Autoconf package on OpenSUSE/SUSE Linux
     zypper:
       name: autoconf
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Autoconf package on Raspberian Linux
+    apt:
+      name: autoconf
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install LibJSonCpp package on OpenSUSE/SUSE Linux
     zypper:
       name: libjsoncpp*
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install LibJSonCpp package on Raspberian Linux
+    apt:
+      name: libjsoncpp26
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install Automake package on OpenSUSE/SUSE Linux
     zypper:
       name: automake
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Automake package on Raspberian Linux
+    apt:
+      name: automake
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install Flex package on OpenSUSE/SUSE Linux
     zypper:
       name: flex
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install Flex package on Raspberian Linux
+    apt:
+      name: flex
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install M4 package on OpenSUSE/SUSE Linux
     zypper:
       name: m4
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install M4 package on Raspberian Linux
+    apt:
+      name: m4
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install NodeJS package on OpenSUSE/SUSE Linux
     zypper:
       name: nodejs22
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install NodeJS package on Raspberian Linux
+    apt:
+      name: nodejs
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install NodeJS-Common package on OpenSUSE/SUSE Linux
     zypper:
       name: nodejs-common
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install NPM package on OpenSUSE/SUSE Linux
     zypper:
       name: npm22
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install NPM package on Raspberian Linux
+    apt:
+      name: npm
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install UnixODBC package on OpenSUSE/SUSE Linux
     zypper:
       name: unixODBC
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install UnixODBC package on Raspberian Linux
+    apt:
+      name: unixodbc
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Install UnixODBC-devel package on OpenSUSE/SUSE Linux
     zypper:
       name: unixODBC-devel
       state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Install UnixODBC-dev package on Raspberian Linux
+    apt:
+      name: unixodbc-dev
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Install libedit-dev package on Raspberian Linux
+    apt:
+      name: libedit-dev
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Install libxml2-dev package on Raspberian Linux
+    apt:
+      name: libxml2-dev
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Install SQLite3 package on Raspberian Linux
+    apt:
+      name: sqlite3
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Install SQLite3-dev package on Raspberian Linux
+    apt:
+      name: libsqlite3-dev
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
 
   - name: Check if Asterisk download exists
     stat:
