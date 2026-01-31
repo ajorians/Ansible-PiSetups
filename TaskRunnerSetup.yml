@@ -1,0 +1,7 @@
+# Run with:
+# ansible-playbook -i inventory.ini TaskRunnerSetup.yml --ask-vault-pass
+
+---
+- import_playbook: BasicSetupSteps.yml
+
+

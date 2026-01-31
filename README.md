@@ -27,6 +27,7 @@ ansible-playbook -i inventory.ini DownloadSetup.yml --limit 'download' --ask-vau
 ansible-playbook -i inventory.ini MusicSetup.yml --limit 'music' --ask-vault-pass
 ansible-playbook -i inventory.ini PBXSetup.yml --limit 'pbx' --ask-vault-pass
 ansible-playbook -i inventory.ini PhotoSyncSetup.yml --limit 'photosync' --ask-vault-pass
+ansible-playbook -i inventory.ini TaskRunnerSetup.yml --limit 'taskrunner' --ask-vault-pass
 ansible-playbook -i inventory.ini VPNSetup.yml --limit 'vpn' --ask-vault-pass
 
 Mirrors isn't setup or ready yet.
