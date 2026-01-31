@@ -17,7 +17,7 @@
     loop:
       - /opt/DockerSwarmData/compiler-explorer
       - /root/docker
-      - /root/docker/compiler-exlorer
+      - /root/docker/compiler-explorer
 
   - name: Copy the docker-compose file with owner and permissions
     ansible.builtin.copy:
