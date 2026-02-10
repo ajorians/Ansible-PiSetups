@@ -3,5 +3,7 @@
 
 ---
 - import_playbook: BasicSetupSteps.yml
-
+- import_playbook: Tasks/DisableSELinux.yml
+- import_playbook: Docker/Forgejo/SetupForgejo.yml
+- import_playbook: Docker/Gitea/SetupGitea.yml
 

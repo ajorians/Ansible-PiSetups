@@ -1,0 +1,71 @@
+# Run with
+# ansible-playbook SetupGitea.yml
+# https://about.gitea.com/
+
+---
+- name: Setup Gitea
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/gitea
+      - /root/docker
+      - /root/docker/gitea
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/gitea
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Gitea from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/gitea
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/gitea.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName gitea.orians.org
+          ServerAlias gitea.stage.orians.org gitea
+          ProxyPass / http://127.0.0.1:3001/
+          ProxyPassReverse / http://127.0.0.1:3001/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/gitea.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName gitea.orians.org
+          ServerAlias gitea.stage.orians.org gitea
+          ProxyPass / http://127.0.0.1:3001/
+          ProxyPassReverse / http://127.0.0.1:3001/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
+

@@ -1,28 +1,13 @@
 # Run with:
-# ansible-playbook DisableSELinux.yml --ask-vault-pass
+# ansible-playbook DisableSELinux.yml
 
 ---
-- name: DiableSELinux
+- name: Disable SELinux
   hosts: all
   tasks:
 
-  - name: Set enforcing to permissive
-    lineinfile:
-      state: present
-      dest: /etc/selinux/config
-      regexp: 'SELINUX=enforcing'
-      line: 'SELINUX=permissive'
-    register: selinux_change
-    notify: reboot system
-
-  handlers:
-    - name: reboot system
-      reboot:
-        msg: "Reboot initiated by Ansible for disable SELinux"
-        connect_timeout: 5
-        reboot_timeout: 300
-        pre_reboot_delay: 0
-        post_reboot_delay: 30
-        test_command: uptime
-      when: selinux_change.changed
+  - name: Put SELinux in permissive mode, logging actions that would be blocked.
+    ansible.posix.selinux:
+      policy: targeted
+      state: permissive
 
