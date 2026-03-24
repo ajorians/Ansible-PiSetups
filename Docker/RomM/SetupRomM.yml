@@ -34,6 +34,11 @@
     community.docker.docker_compose_v2:
       project_src: /root/docker/romm
 
+  - name: Print some information
+    ansible.builtin.debug:
+      msg: |
+        In NGinx Proxy Manager this needs Websockets Support
+
   - name: Make Apache VHost file
     ansible.builtin.copy:
       dest: /etc/apache2/vhosts.d/romm.conf
@@ -41,7 +46,7 @@
       content: |
         <VirtualHost *:80>
           ServerName romm.orians.org
-          ServerAlias romm.stage.orians.org romm
+          ServerAlias romm.stage.orians.org romm emulator.orians.org emulators.orians.org emu.orians.org
           ProxyPass / http://127.0.0.1:3001/
           ProxyPassReverse / http://127.0.0.1:3001/
         </VirtualHost>
@@ -57,7 +62,7 @@
       content: |
         <VirtualHost *:80>
           ServerName romm.orians.org
-          ServerAlias romm.stage.orians.org gitea
+          ServerAlias romm.stage.orians.org romm emulator.orians.org emulators.orians.org emu.orians.org
           ProxyPass / http://127.0.0.1:3001/
           ProxyPassReverse / http://127.0.0.1:3001/
         </VirtualHost>
