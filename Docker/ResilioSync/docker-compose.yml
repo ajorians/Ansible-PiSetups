@@ -8,8 +8,8 @@ services:
       - TZ=America/Detroit
     volumes:
       - /opt/DockerSwarmData/resiliosync/config:/config
-      - /opt/DockerSwarmData/resiliosync/downloads:/downloads
-      - /mnt/sync:/sync
+      - /opt/DockerSwarmData/resiliosync/license:/license
+      - ${RESILIOSYNC_DOWNLOAD_PATH}:/sync
     ports:
       - 8888:8888 # <Host Port>:<Container Port>
       - 55555:55555

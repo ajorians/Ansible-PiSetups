@@ -15,9 +15,12 @@
       group: users
       mode: 0777
     loop:
-      - /mnt/DockerSwarmData/resiliosync
-      - /mnt/DockerSwarmData/resiliosync/config
-      - /mnt/DockerSwarmData/resiliosync/downloads
+      - /opt/DockerSwarmData/resiliosync
+      - /opt/DockerSwarmData/resiliosync/config
+      - /opt/DockerSwarmData/resiliosync/sync
+      - /opt/DockerSwarmData/resiliosync/downloads
+      - "{{ resiliosync_download_path }}"
+      - "{{ resiliosync_download_path }}/license"
       - /root/docker
       - /root/docker/resiliosync
       - /mnt/sync
@@ -29,6 +32,21 @@
       owner: ajorians
       group: users
       mode: 0777
+
+  - name: Deploy encrypted license file to remote server
+    ansible.builtin.copy:
+      src: ResilioSync.btskey
+      dest: "{{ resiliosync_download_path }}/license/ResilioSync.btskey"
+      owner: ajorians
+      group: users
+      mode: '0777'
+
+  - name: Create env file for docker compose variables
+    ansible.builtin.copy:
+      dest: /root/docker/resiliosync/.env
+      content: |
+        RESILIOSYNC_DOWNLOAD_PATH={{ resiliosync_download_path }}
+      mode: '0644'
 
   - name: Deploy Resilio-Sync from a compose file
     community.docker.docker_compose_v2:

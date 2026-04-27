@@ -8,3 +8,6 @@
 - import_playbook: Docker/Compiler-Explorer/SetupCompiler-Explorer.yml
 - import_playbook: InstallNDLessSDK.yml
 
+- import_playbook: Docker/Forgejo/SetupForgejo.yml
+- import_playbook: Docker/Gitea/SetupGitea.yml
+
