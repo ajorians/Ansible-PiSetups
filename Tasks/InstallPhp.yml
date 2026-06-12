@@ -6,9 +6,15 @@
   hosts: all
   tasks:
 
+  - name: Add PHP repository
+    community.general.zypper_repository:
+      repo: 'https://download.opensuse.org/repositories/devel:languages:php:php82/openSUSE_Tumbleweed/devel:languages:php:php82.repo'
+      auto_import_keys: true
+      runrefresh: true
+
   - name: Install Php 8 package on OpenSUSE/SUSE Linux
     zypper:
-      name: php8
+      name: devel_languages_php_php82:php8
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
@@ -19,30 +25,30 @@
     zypper:
       state: present
       name:
-        - php8-APCu
-        - php8-cli
-        - php8-ctype
-        - php8-curl
-        - php8-dom
-        - php8-fileinfo
-        - php8-gd
-        - php8-gettext
-        - php8-iconv
-        - php8-intl
-        - php8-mbstring
-        - php8-mysql
-        - php8-openssl
-        - php8-pdo
-        - php8-pear
-        - php8-phar
-        - php8-posix
-        - php8-sqlite
-        - php8-sysvsem
-        - php8-tokenizer
-        - php8-xmlreader
-        - php8-xmlwriter
-        - php8-zip
-        - php8-zlib
+        #- php8-APCu
+        - devel_languages_php_php82:php8-cli
+        - devel_languages_php_php82:php8-ctype
+        - devel_languages_php_php82:php8-curl
+        - devel_languages_php_php82:php8-dom
+        - devel_languages_php_php82:php8-fileinfo
+        - devel_languages_php_php82:php8-gd
+        - devel_languages_php_php82:php8-gettext
+        - devel_languages_php_php82:php8-iconv
+        - devel_languages_php_php82:php8-intl
+        - devel_languages_php_php82:php8-mbstring
+        - devel_languages_php_php82:php8-mysql
+        - devel_languages_php_php82:php8-openssl
+        - devel_languages_php_php82:php8-pdo
+        - devel_languages_php_php82:php8-pear
+        - devel_languages_php_php82:php8-phar
+        - devel_languages_php_php82:php8-posix
+        - devel_languages_php_php82:php8-sqlite
+        - devel_languages_php_php82:php8-sysvsem
+        - devel_languages_php_php82:php8-tokenizer
+        - devel_languages_php_php82:php8-xmlreader
+        - devel_languages_php_php82:php8-xmlwriter
+        - devel_languages_php_php82:php8-zip
+        - devel_languages_php_php82:php8-zlib
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
     notify:
@@ -66,7 +72,7 @@
 
   - name: Install Apache2 Php Mod package on OpenSUSE/SUSE Linux
     zypper:
-      name: apache2-mod_php8
+      name: devel_languages_php_php82:apache2-mod_php8
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1

@@ -23,4 +23,4 @@
 - import_playbook: Tasks/DisableSELinux.yml
 - import_playbook: Tasks/InstallFreePBX.yml
 - import_playbook: Tasks/InstallChromium.yml
-- import_playbook: Tasks/SetupFreePBX.yml
+#- import_playbook: Tasks/SetupFreePBX.yml

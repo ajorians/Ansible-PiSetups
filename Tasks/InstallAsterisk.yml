@@ -5,7 +5,7 @@
 - name: Install Asterisk
   hosts: all
   vars:
-     asterisk_version: "asterisk-23.1.0"
+     asterisk_version: "asterisk-23.3.0"
   tasks:
 
 #Install some prerequesits
@@ -95,7 +95,7 @@
 
   - name: Install NodeJS package on OpenSUSE/SUSE Linux
     zypper:
-      name: nodejs22
+      name: nodejs
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
@@ -116,7 +116,7 @@
 
   - name: Install NPM package on OpenSUSE/SUSE Linux
     zypper:
-      name: npm22
+      name: npm
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
