@@ -11,6 +11,8 @@
       repo: 'https://download.opensuse.org/repositories/devel:languages:php:php82/openSUSE_Tumbleweed/devel:languages:php:php82.repo'
       auto_import_keys: true
       runrefresh: true
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
   - name: Install Php 8 package on OpenSUSE/SUSE Linux
     zypper:

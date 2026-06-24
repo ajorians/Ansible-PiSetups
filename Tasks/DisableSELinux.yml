@@ -10,4 +10,6 @@
     ansible.posix.selinux:
       policy: targeted
       state: permissive
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
 
