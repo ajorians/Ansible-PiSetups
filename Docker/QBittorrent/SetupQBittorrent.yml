@@ -1,0 +1,77 @@
+# Run with
+# ansible-playbook SetupQBittorrent.yml
+# https://www.qbittorrent.org/
+
+---
+- name: Setup QBittorrent
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/qbittorrent
+      - /opt/DockerSwarmData/qbittorrent/config
+      - /mnt/download_files
+      - /root/docker
+      - /root/docker/qbittorrent
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/qbittorrent
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy QBittorrent from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/qbittorrent
+
+  - name: Print how to get temporary password
+    ansible.builtin.debug:
+      msg: "Username is admin and temporary password if found running: docker compose logs qbittorrent"
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/qbittorrent.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName qbittorrent.orians.org
+          ServerAlias qbittorrent.stage.orians.org qbittorrent
+          ProxyPass / http://127.0.0.1:8080/
+          ProxyPassReverse / http://127.0.0.1:8080/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/qbittorrent.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName qbittorrent.orians.org
+          ServerAlias qbittorrent.stage.orians.org qbittorrent
+          ProxyPass / http://127.0.0.1:8080/
+          ProxyPassReverse / http://127.0.0.1:8080/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2
+
