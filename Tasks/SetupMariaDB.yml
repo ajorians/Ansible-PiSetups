@@ -54,6 +54,7 @@
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
 
+  - name: Allow connections besides localhost
     replace:
       path: /etc/mysql/mariadb.conf.d/50-server.cnf
       regexp: '^bind-address\s+=\s+127.0.0.1'

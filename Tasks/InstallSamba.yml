@@ -27,6 +27,16 @@
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
 
+  - name: Allow Samba through the firewall
+    ansible.posix.firewalld:
+      service: samba
+      state: enabled
+      permanent: true
+      immediate: true
+      zone: public
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
   - name: Enable Samba service
     ansible.builtin.systemd:
       name: smb

@@ -15,5 +15,6 @@ services:
       - TZ=America/Detroit
     volumes:
       - /opt/DockerSwarmData/qbittorrent/config:/config
-      - /mnt/download_files:/data/torrents
+      - /opt/DockerSwarmData/qbittorrent/torrents:/data/torrents
+      - /mnt/download_files:/downloads
 

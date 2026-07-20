@@ -8,7 +8,7 @@
 
   - name: Install Certbot package on OpenSUSE/SUSE Linux
     zypper:
-      name: python311-certbot
+      name: python314-certbot
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1
@@ -22,7 +22,7 @@
 
   - name: Install Certbot Apache Plugin package on OpenSUSE/SUSE Linux
     zypper:
-      name: python311-certbot-apache
+      name: python314-certbot-apache
       state: present
     when:
     - ansible_facts['distribution'].find("openSUSE") != -1

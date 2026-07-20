@@ -17,6 +17,7 @@
     loop:
       - /opt/DockerSwarmData/qbittorrent
       - /opt/DockerSwarmData/qbittorrent/config
+      - /opt/DockerSwarmData/qbittorrent/torrents
       - /mnt/download_files
       - /root/docker
       - /root/docker/qbittorrent
@@ -69,9 +70,25 @@
     notify:
     - Restart Apache2 service
 
+  - name: Add Downloads Share
+    blockinfile:
+      path: /etc/samba/smb.conf
+      marker: "# Downloads {mark} Ansible Managed Block"
+      block: |
+        [Downloads]
+        comment = QBittorrent download location
+        path = /mnt/download_files
+        guest ok = Yes
+        read only = No
+    notify:
+    - Restart Samba Service
+
   handlers:
     - name: Restart Apache2 service
       ansible.builtin.systemd:
         state: restarted
         name: apache2
-
+    - name: Restart Samba Service
+      ansible.builtin.systemd:
+        state: restarted
+        name: smb
