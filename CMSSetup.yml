@@ -7,4 +7,5 @@
 - import_playbook: Tasks/InstallVSFTP.yml
 
 - import_playbook: ServerSetup/nginx_proxy_manager/InstallNginxProxyManager.yml 
+- import_playbook: Docker/WikiJS/SetupWikiJS.yml 
 
