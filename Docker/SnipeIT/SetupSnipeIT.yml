@@ -1,0 +1,96 @@
+# Run with
+# ansible-playbook SetupSnipeIT.yml
+# https://snipeitapp.com/
+
+---
+- name: Setup Snipe-IT
+  hosts: all
+  tasks:
+
+  - name: Create directory for data
+    file:
+      path: "{{ item }}"
+      state: directory
+      owner: ajorians
+      group: users
+      mode: 0777
+    loop:
+      - /opt/DockerSwarmData/snipeit
+      - /opt/DockerSwarmData/snipeit/storage
+      - /root/docker
+      - /root/docker/snipeit
+
+  - name: Create Database
+    community.mysql.mysql_db:
+      login_user: root
+      name:
+        - snipeit
+      state: present
+
+  - name: Grant user access
+    community.mysql.mysql_user:
+      login_user: root
+      state: present
+      name: snipeituser
+      host: '%'
+      password: snipeitpassword 
+      priv:
+        'snipeit.*': 'ALL,GRANT'
+
+  - name: Copy the docker-compose file with owner and permissions
+    ansible.builtin.copy:
+      src: docker-compose.yml
+      dest: /root/docker/snipeit
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Copy .env file with owner and permissions
+    ansible.builtin.copy:
+      src: environment.env
+      dest: /root/docker/snipeit/.env
+      owner: ajorians
+      group: users
+      mode: 0777
+
+  - name: Deploy Snipe-IT from a compose file
+    community.docker.docker_compose_v2:
+      project_src: /root/docker/snipeit
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/vhosts.d/snipeit.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName snipeit.orians.org
+          ServerAlias snipe-it.orians.org snipeit.stage.orians.org snipeit
+          ProxyPass / http://127.0.0.1:5800/
+          ProxyPassReverse / http://127.0.0.1:5800/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+    notify:
+    - Restart Apache2 service
+
+  - name: Make Apache VHost file
+    ansible.builtin.copy:
+      dest: /etc/apache2/sites-available/snipeit.conf
+      force: false
+      content: |
+        <VirtualHost *:80>
+          ServerName snipeit.orians.org
+          ServerAlias snipe-it.orians.org snipeit.stage.orians.org snipeit
+          ProxyPass / http://127.0.0.1:5800/
+          ProxyPassReverse / http://127.0.0.1:5800/
+        </VirtualHost>
+    when:
+    - ansible_facts['distribution'].find("openSUSE") == -1
+    notify:
+    - Restart Apache2 service
+
+  handlers:
+    - name: Restart Apache2 service
+      ansible.builtin.systemd:
+        state: restarted
+        name: apache2

@@ -1,0 +1,13 @@
+version: "3"
+services:
+  snipeit:
+    image: snipe/snipe-it:latest
+    container_name: snipeit
+    volumes:
+      - /opt/DockerSwarmData/snipeit/storage:/var/lib/snipeit
+    ports:
+      - "5800:80"
+    restart: unless-stopped
+    env_file:
+      - .env
+
