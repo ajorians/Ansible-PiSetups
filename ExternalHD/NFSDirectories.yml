@@ -1,0 +1,22 @@
+# Run with:
+# ansible-playbook NFSDirectories.yml
+
+---
+- name: Configure NFS Directories
+  hosts: all
+  tasks:
+
+  - name: Add Allwrite in Exports
+    ansible.builtin.lineinfile:
+      path: /etc/exports
+      line: '/mnt/external/allwrite   10.0.0.0/8(rw,sync,no_subtree_check,no_root_squash)'
+
+  - name: Add Download Files in Exports
+    ansible.builtin.lineinfile:
+      path: /etc/exports
+      line: '/mnt/external/download_files   10.0.0.0/8(rw,sync,no_subtree_check,no_root_squash)'
+
+  - name: Start NFS Server service
+    ansible.builtin.systemd:
+      state: restarted
+      name: nfs-server
