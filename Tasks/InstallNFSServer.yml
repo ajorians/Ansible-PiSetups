@@ -1,0 +1,48 @@
+# Run with:
+# ansible-playbook InstallNFSServer.yml
+
+---
+- name: Install NFS Server
+  hosts: all
+  tasks:
+
+  - name: Install NFS Kernel Server package on OpenSUSE/SUSE Linux
+    zypper:
+      name: nfs-kernel-server
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+#  - name: Install NFS Server package on Raspberian Linux
+#    apt:
+#      name: nfs-server
+#      state: present
+#    when:
+#    - ansible_facts['distribution'].find("openSUSE") == -1
+
+  - name: Install NFS Server YAST2 package on OpenSUSE/SUSE Linux
+    zypper:
+      name: yast2-nfs-server
+      state: present
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Allow NFS through the firewall
+    ansible.posix.firewalld:
+      service: nfs
+      state: enabled
+      permanent: true
+      immediate: true
+      zone: public
+    when:
+    - ansible_facts['distribution'].find("openSUSE") != -1
+
+  - name: Enable NFS service
+    ansible.builtin.systemd:
+      name: nfs-server
+      enabled: yes
+
+  - name: Start NFS service
+    ansible.builtin.systemd:
+      state: restarted
+      name: nfs-server

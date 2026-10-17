@@ -23,6 +23,7 @@
 
 - import_playbook: Tasks/InstallScreen.yml
 - import_playbook: Tasks/InstallSamba.yml
+- import_playbook: Tasks/InstallNFSServer.yml
 
 - import_playbook: Tasks/InstallVSFTP.yml
 
